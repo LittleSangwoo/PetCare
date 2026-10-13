@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="ru" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VetPocket — Шевцова Варвара Валентиновна (Гр. 53-02, Петровский колледж)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+            },
+            accent: {
+              cyan: '#06b6d4',
+              purple: '#8b5cf6',
+              rose: '#f43f5e',
+              amber: '#f59e0b',
+            },
+            dark: {
+              base: '#0B0F19',
+              card: '#111827',
+              border: 'rgba(255, 255, 255, 0.08)',
+            }
+          },
+          animation: {
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 6s ease-in-out infinite',
+            'scanline': 'scanline 2.5s linear infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-8px)' },
+            },
+            scanline: {
+              '0%': { top: '0%' },
+              '100%': { top: '100%' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #070B14;
+      color: #F3F4F6;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .glow-sphere-1 {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(40px);
+    }
+    .glow-sphere-2 {
+      position: absolute;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(139, 92, 246, 0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(45px);
+    }
+
+    .glass-card {
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+    }
+
+    .glass-card-hover {
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-card-hover:hover {
+      border-color: rgba(52, 211, 153, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 25px 45px -10px rgba(16, 185, 129, 0.15);
+    }
+
+    /* Slide transitions */
+    .slide-viewport {
+      perspective: 1000px;
+    }
+    .slide-container {
+      transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .slide-container.hidden-slide {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.97) translateY(12px);
+      position: absolute;
+      inset: 0;
+    }
+    .slide-container.active-slide {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1) translateY(0);
+      position: relative;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.5);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(16, 185, 129, 0.5);
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col font-sans select-none antialiased">
+
+  <!-- Background visual elements -->
+  <div class="glow-sphere-1 -top-32 -left-20"></div>
+  <div class="glow-sphere-2 -bottom-32 -right-20"></div>
+  <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none"></div>
+
+  <!-- Top Navigation Header -->
+  <header class="relative z-30 flex items-center justify-between px-6 py-3 border-b border-white/10 bg-dark-base/80 backdrop-blur-md shrink-0">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 via-brand-500 to-accent-cyan flex items-center justify-center shadow-lg shadow-brand-500/20 text-white font-extrabold text-lg">
+        <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="font-extrabold tracking-tight text-white text-base">VetPocket</span>
+          <span class="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 font-semibold tracking-wider">Kotlin • Compose</span>
+        </div>
+        <p class="text-[11px] text-gray-400 font-medium">Шевцова В. В. • Группа 53-02 • Петровский колледж</p>
+      </div>
+    </div>
+
+    <!-- Center Progress Indicators -->
+    <div class="hidden md:flex items-center gap-2 bg-dark-card/90 px-3 py-1.5 rounded-full border border-white/10">
+      <div id="dotIndicators" class="flex items-center gap-1.5">
+        <!-- Dots injected via JavaScript -->
+      </div>
+      <div class="h-3.5 w-[1px] bg-white/20 mx-1"></div>
+      <span id="slideCounterText" class="font-mono text-xs text-gray-300 font-semibold">01 / 06</span>
+    </div>
+
+    <!-- Right Controls -->
+    <div class="flex items-center gap-2">
+      <!-- Speaker Notes Button -->
+      <button id="toggleNotesBtn" title="Шпаргалка спикера (что говорить на защите)" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition">
+        <svg class="w-4 h-4 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        <span class="hidden sm:inline">Шпаргалка спикера</span>
+      </button>
+
+      <!-- Sound Toggle -->
+      <button id="soundToggleBtn" title="Звуки кликов" class="p-2 rounded-lg text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 transition">
+        <svg id="soundIconOn" class="w-4 h-4 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+        </svg>
+        <svg id="soundIconOff" class="w-4 h-4 text-gray-500 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+        </svg>
+      </button>
+
+      <!-- Fullscreen Toggle -->
+      <button id="fullscreenBtn" title="На весь экран (F)" class="p-2 rounded-lg text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 transition">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0 0l-5-5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Progress Line -->
+  <div class="h-1 bg-white/5 w-full relative z-30">
+    <div id="topProgressBar" class="h-full bg-gradient-to-r from-brand-500 via-accent-cyan to-accent-purple transition-all duration-300 w-1/6"></div>
+  </div>
+
+  <!-- Main Presentation Area -->
+  <main class="relative flex-1 overflow-hidden slide-viewport flex items-center justify-center p-4 sm:p-6 lg:p-8">
+
+    <!-- ================= SLIDE 1: PITCH & HERO ================= -->
+    <div class="slide-container active-slide w-full max-w-6xl h-full flex flex-col justify-center" data-slide="1">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-7 space-y-5">
+          
+          <!-- Badges Bar -->
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs font-semibold tracking-wide">
+              <span class="w-2 h-2 rounded-full bg-brand-400 animate-ping"></span>
+              СПб ГБПОУ «Петровский колледж» • 2026 г.
+            </div>
+            <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-300 text-xs font-mono">
+              Инструментальные средства разработки
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight">
+              VetPocket <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-accent-cyan to-accent-purple">AI</span>
+            </h1>
+            <p class="text-xl sm:text-2xl font-semibold text-gray-200">
+              Интеллектуальный карманный ассистент здоровья и персонального питания питомца
+            </p>
+          </div>
+
+          <!-- Автор проекта: Карточка студента -->
+          <div class="p-3.5 rounded-2xl bg-gradient-to-r from-white/5 to-white/[0.02] border border-white/15 flex items-center justify-between max-w-xl shadow-lg">
+            <div class="flex items-center gap-3">
+              <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-brand-500 to-accent-cyan flex items-center justify-center text-dark-base font-black text-base shadow-md">
+                ВШ
+              </div>
+              <div>
+                <div class="text-[11px] font-mono uppercase tracking-wider text-brand-400 font-bold">Выполнила студентка:</div>
+                <div class="text-base font-extrabold text-white tracking-tight">Шевцова Варвара Валентиновна</div>
+              </div>
+            </div>
+            <div class="text-right pl-3 border-l border-white/10">
+              <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-brand-500/20 text-brand-300 border border-brand-500/30">Группа 53-02</span>
+              <div class="text-[11px] text-gray-400 mt-1 font-medium">Петровский колледж</div>
+            </div>
+          </div>
+
+          <p class="text-sm text-gray-400 leading-relaxed max-w-xl">
+            Нативное Android-приложение на <span class="text-brand-300 font-medium">Jetpack Compose</span>, объединяющее предиктивный анализ составов кормов через <span class="text-accent-cyan font-medium">Edge ML + LLM</span>, цифровую медкарту и мгновенную 24/7 SOS-навигацию.
+          </p>
+
+          <div class="grid grid-cols-3 gap-3 pt-1 max-w-lg">
+            <div class="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
+              <div class="text-xs text-gray-400 font-medium">UI Фреймворк</div>
+              <div class="text-sm font-bold text-white mt-1">Jetpack Compose</div>
+            </div>
+            <div class="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
+              <div class="text-xs text-gray-400 font-medium">Интеллект</div>
+              <div class="text-sm font-bold text-brand-400 mt-1">On-Device ML + LLM</div>
+            </div>
+            <div class="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
+              <div class="text-xs text-gray-400 font-medium">База данных</div>
+              <div class="text-sm font-bold text-accent-cyan mt-1">Room (Offline-first)</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 pt-1">
+            <button onclick="goToSlide(2)" class="px-6 py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-brand-500 to-emerald-600 hover:from-brand-400 hover:to-emerald-500 text-dark-base shadow-lg shadow-brand-500/25 flex items-center gap-2 transition transform hover:scale-[1.02]">
+              <span>Исследовать презентацию</span>
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </button>
+            <span class="text-xs text-gray-500">Клавиши: <kbd class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-gray-300">Space</kbd> или <kbd class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-gray-300">→</kbd></span>
+          </div>
+        </div>
+
+        <!-- Visual Hero Card -->
+        <div class="lg:col-span-5 flex justify-center">
+          <div class="relative w-full max-w-sm">
+            <div class="absolute -inset-1 bg-gradient-to-r from-brand-500 via-accent-cyan to-accent-purple rounded-3xl blur-xl opacity-40 animate-pulse-slow"></div>
+            
+            <div class="relative rounded-3xl glass-card p-6 border border-white/20 shadow-2xl space-y-5">
+              <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-400 to-orange-500 flex items-center justify-center text-2xl shadow-md">
+                    🐱
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-white text-base">Ахиллес</h3>
+                    <p class="text-xs text-brand-400 font-medium">Шотландский вислоухий • 5 лет</p>
+                  </div>
+                </div>
+                <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                  Риск МКБ
+                </span>
+              </div>
+
+              <!-- AI Status card -->
+              <div class="p-3.5 rounded-2xl bg-dark-base/90 border border-white/10 space-y-2">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="text-gray-400 flex items-center gap-1.5 font-medium">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span> AI Диетолог активен
+                  </span>
+                  <span class="font-mono text-emerald-400 font-bold">100% On-Device OCR</span>
+                </div>
+                <p class="text-xs text-gray-300 leading-snug">
+                  Состав корма сверяется персонально с медицинским профилем животного в реальном времени.
+                </p>
+              </div>
+
+              <!-- Live Stat Bars -->
+              <div class="space-y-3 pt-1">
+                <div>
+                  <div class="flex justify-between text-xs mb-1 font-medium">
+                    <span class="text-gray-400">Текущий вес</span>
+                    <span class="text-white font-mono font-bold">4.85 кг (+0.1)</span>
+                  </div>
+                  <div class="h-2 rounded-full bg-white/10 overflow-hidden">
+                    <div class="h-full bg-brand-400 rounded-full w-[78%]"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-xs mb-1 font-medium">
+                    <span class="text-gray-400">График вакцинации</span>
+                    <span class="text-accent-cyan font-mono font-bold">Осталось 5 дней</span>
+                  </div>
+                  <div class="h-2 rounded-full bg-white/10 overflow-hidden">
+                    <div class="h-full bg-accent-cyan rounded-full w-[90%]"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SOS Button badge -->
+              <div class="pt-2">
+                <div class="w-full py-2.5 px-4 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-300 flex items-center justify-between text-xs font-bold">
+                  <span class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+                    SOS: Ветклиники рядом 24/7
+                  </span>
+                  <span class="font-mono bg-rose-500 text-white text-[10px] px-2 py-0.5 rounded">1 клик</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 2: RELEVANCE & PROBLEM ================= -->
+    <div class="slide-container hidden-slide w-full max-w-6xl h-full flex flex-col justify-center" data-slide="2">
+      <div class="space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
+          <div>
+            <div class="text-xs font-mono font-bold uppercase tracking-wider text-rose-400 mb-1">Ключевая проблема & Актуальность</div>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Почему VetPocket должен существовать прямо сейчас?
+            </h2>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/10 border border-rose-500/30 text-rose-400">
+            Критический разрыв в заботе о питомцах
+          </span>
+        </div>
+
+        <!-- 3 Pillars of Problem -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Problem 1 -->
+          <div class="glass-card rounded-2xl p-5 space-y-3 glass-card-hover border-t-2 border-t-rose-500">
+            <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold text-lg">
+              🔍
+            </div>
+            <h3 class="text-lg font-bold text-white">«Слепой» выбор рационов</h3>
+            <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">
+              70%+ владельцев не умеют расшифровывать микроэлементы. За ярким маркетингом «Премиум» часто скрывается смертельно опасный для кастрированных котов избыток магния и фосфора, провоцирующий мочекаменную болезнь (МКБ).
+            </p>
+            <div class="pt-2 text-[11px] font-mono text-rose-300 bg-rose-500/10 p-2 rounded-lg border border-rose-500/20">
+              ⚠️ Маркетинг скрывает реальный химический состав
+            </div>
+          </div>
+
+          <!-- Problem 2 -->
+          <div class="glass-card rounded-2xl p-5 space-y-3 glass-card-hover border-t-2 border-t-amber-500">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-lg">
+              📄
+            </div>
+            <h3 class="text-lg font-bold text-white">Хаос бумажных ветпаспортов</h3>
+            <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">
+              Физические ветпаспорта забываются дома, записи о дегельминтизации и вакцинах теряются, а динамика веса нигде не фиксируется. Владельцы пропускают сезонные обработки от смертоносных клещей.
+            </p>
+            <div class="pt-2 text-[11px] font-mono text-amber-300 bg-amber-500/10 p-2 rounded-lg border border-amber-500/20">
+              📅 Просроченные вакцины ставят иммунитет под угрозу
+            </div>
+          </div>
+
+          <!-- Problem 3 -->
+          <div class="glass-card rounded-2xl p-5 space-y-3 glass-card-hover border-t-2 border-t-accent-cyan">
+            <div class="w-10 h-10 rounded-xl bg-accent-cyan/20 text-accent-cyan flex items-center justify-center font-bold text-lg">
+              ⏱️
+            </div>
+            <h3 class="text-lg font-bold text-white">Паника в критические моменты</h3>
+            <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">
+              В 2 часа ночи, когда питомец внезапно задыхается или отравился, человек в стрессе ищет клинику через обычные поисковики, натыкаясь на закрытые двери или неактуальные номера телефонов.
+            </p>
+            <div class="pt-2 text-[11px] font-mono text-cyan-300 bg-cyan-500/10 p-2 rounded-lg border border-cyan-500/20">
+              🚨 Потеря «золотого часа» в экстренной медицине
+            </div>
+          </div>
+        </div>
+
+        <!-- The Answer / Paradigm shift -->
+        <div class="glass-card rounded-2xl p-5 border-l-4 border-l-brand-400 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-gradient-to-r from-brand-950/40 via-dark-card to-dark-card">
+          <div class="space-y-1">
+            <div class="text-xs font-mono text-brand-400 uppercase tracking-wider font-bold">Наш ответ и манифест</div>
+            <p class="text-sm sm:text-base font-semibold text-white">
+              «От запоздалого лечения к превентивному контролю в 1 клик с помощью мобильного искусственного интеллекта»
+            </p>
+          </div>
+          <div class="flex items-center gap-3 shrink-0">
+            <div class="text-right">
+              <div class="text-2xl font-extrabold text-brand-400">40M+</div>
+              <div class="text-[10px] text-gray-400">домашних кошек и собак в РФ</div>
+            </div>
+            <div class="h-8 w-[1px] bg-white/10"></div>
+            <div class="text-right">
+              <div class="text-2xl font-extrabold text-accent-cyan">68%</div>
+              <div class="text-[10px] text-gray-400">семей держат питомцев</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 3: TARGET AUDIENCE & PERSONAS ================= -->
+    <div class="slide-container hidden-slide w-full max-w-6xl h-full flex flex-col justify-center" data-slide="3">
+      <div class="space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
+          <div>
+            <div class="text-xs font-mono font-bold uppercase tracking-wider text-accent-purple mb-1">Пользовательский сегмент</div>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Целевая аудитория и ключевые портреты (Personas)
+            </h2>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-accent-purple/20 border border-accent-purple/30 text-purple-300">
+            B2C: Mobile First Pet Owners
+          </span>
+        </div>
+
+        <!-- 3 Target Segments -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="glass-card rounded-2xl p-4.5 space-y-2.5 border-t-2 border-t-brand-400">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-brand-400">СЕГМЕНТ 1</span>
+              <span class="text-xs bg-white/5 px-2 py-0.5 rounded text-gray-300">45% аудитории</span>
+            </div>
+            <h4 class="font-bold text-white text-base">Осознанные «Pet-Parents»</h4>
+            <p class="text-xs text-gray-400 leading-relaxed">
+              Молодые люди (20–35 лет), воспринимающие животное как полноправного члена семьи. Внимательно читают упаковки, заботятся о превентивном качестве жизни.
+            </p>
+            <div class="text-[11px] text-gray-300 font-medium bg-white/5 p-2 rounded-lg">
+              Потребность: Мгновенно понять, можно ли давать корм конкретно их любимцу.
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl p-4.5 space-y-2.5 border-t-2 border-t-rose-400">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-rose-400">СЕГМЕНТ 2</span>
+              <span class="text-xs bg-white/5 px-2 py-0.5 rounded text-gray-300">30% аудитории</span>
+            </div>
+            <h4 class="font-bold text-white text-base">Владельцы «Хроников»</h4>
+            <p class="text-xs text-gray-400 leading-relaxed">
+              Питомцы с МКБ, аллергиями, диабетом или кастрированные животные. Для них даже единичная ошибка в диете приводит к рецидиву и операциям за десятки тысяч рублей.
+            </p>
+            <div class="text-[11px] text-gray-300 font-medium bg-white/5 p-2 rounded-lg">
+              Потребность: Жесткая контекстная фильтрация ингредиентов по медкарте.
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl p-4.5 space-y-2.5 border-t-2 border-t-accent-cyan">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-accent-cyan">СЕГМЕНТ 3</span>
+              <span class="text-xs bg-white/5 px-2 py-0.5 rounded text-gray-300">25% аудитории</span>
+            </div>
+            <h4 class="font-bold text-white text-base">Занятые горожане</h4>
+            <p class="text-xs text-gray-400 leading-relaxed">
+              Работают в плотном графике, часто забывают, когда в последний раз давали таблетку от глистов или когда нужно делать ревакцинацию от бешенства перед поездкой.
+            </p>
+            <div class="text-[11px] text-gray-300 font-medium bg-white/5 p-2 rounded-lg">
+              Потребность: Надежные фоновые пуш-напоминания (AlarmManager) и история.
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed User Persona Card (From DOCX specs) -->
+        <div class="glass-card rounded-2xl p-5 border border-white/10 bg-gradient-to-br from-dark-card via-dark-card to-brand-950/30">
+          <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-500 to-accent-cyan flex items-center justify-center text-xl shadow-lg">
+                🐾
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h4 class="font-extrabold text-white text-base">Реальный профиль: Кот Ахиллес</h4>
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-semibold">Demo Profile из ТД</span>
+                </div>
+                <p class="text-xs text-gray-400">Шотландский вислоухий • 5 лет • 4.8 кг • Кастрирован • Склонность к МКБ</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-400">Поведение ИИ:</span>
+              <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-emerald-300">
+                Контекст внедряется в System Prompt
+              </span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+            <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+              <span class="text-gray-400 block mb-1">Сценарий 1: В зоомагазине</span>
+              <p class="text-gray-200">Хозяйка наводит камеру на пачку корма. Приложение моментально подсвечивает: «Осторожно! Фосфор > 1.2%, опасно для Ахиллеса при МКБ».</p>
+            </div>
+            <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+              <span class="text-gray-400 block mb-1">Сценарий 2: Дома</span>
+              <p class="text-gray-200">Взвесила на кухонных весах -> 1 клик на дашборде «+ Взвесить» -> график веса Vico сразу обновляет динамику здоровья.</p>
+            </div>
+            <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+              <span class="text-gray-400 block mb-1">Сценарий 3: Тревога ночью</span>
+              <p class="text-gray-200">Кот вялый, вырвало шерстью -> запись в дневник симптомов, кнопка SOS мгновенно находит ночную клинику с дежурным врачом.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 4: PRODUCT DEEP DIVE (INTERACTIVE) ================= -->
+    <div class="slide-container hidden-slide w-full max-w-6xl h-full flex flex-col justify-center" data-slide="4">
+      <div class="space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-3">
+          <div>
+            <div class="text-xs font-mono font-bold uppercase tracking-wider text-brand-400 mb-1">Архитектура 4 ключевых экранов</div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              Интерактивный разбор продукта (VetPocket Core UI)
+            </h2>
+          </div>
+          <span class="text-xs text-gray-400 font-mono">Нажмите на экран для переключения симулятора 👇</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <!-- Screen Tabs Selector & Descriptions (7 Cols) -->
+          <div class="lg:col-span-7 space-y-3">
+            <div class="grid grid-cols-2 gap-2.5">
+              <!-- Tab 1 -->
+              <button onclick="setMockupScreen('dashboard')" id="tabBtn-dashboard" class="screen-tab-btn active text-left p-3.5 rounded-xl border transition glass-card border-brand-500 bg-brand-500/10">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-base">📊</span>
+                  <span class="font-bold text-white text-sm">1. Дашборд</span>
+                </div>
+                <p class="text-xs text-gray-300 line-clamp-2">Главная сводка, фото питомца, таймеры прививок, быстрый вес и тревожная SOS кнопка.</p>
+              </button>
+
+              <!-- Tab 2 -->
+              <button onclick="setMockupScreen('scanner')" id="tabBtn-scanner" class="screen-tab-btn text-left p-3.5 rounded-xl border border-white/10 transition glass-card hover:border-white/30">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-base">📸</span>
+                  <span class="font-bold text-white text-sm">2. AI-Сканер</span>
+                </div>
+                <p class="text-xs text-gray-400 line-clamp-2">CameraX + Google ML Kit OCR. Мгновенный вердикт нейросети 🟢/🟡/🔴 по составу.</p>
+              </button>
+
+              <!-- Tab 3 -->
+              <button onclick="setMockupScreen('health')" id="tabBtn-health" class="screen-tab-btn text-left p-3.5 rounded-xl border border-white/10 transition glass-card hover:border-white/30">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-base">🩺</span>
+                  <span class="font-bold text-white text-sm">3. Медкарта & График</span>
+                </div>
+                <p class="text-xs text-gray-400 line-clamp-2">Вакцины, график динамики веса Vico Compose и дневник симптомов с таймстемпами.</p>
+              </button>
+
+              <!-- Tab 4 -->
+              <button onclick="setMockupScreen('map')" id="tabBtn-map" class="screen-tab-btn text-left p-3.5 rounded-xl border border-white/10 transition glass-card hover:border-white/30">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-base">🗺️</span>
+                  <span class="font-bold text-white text-sm">4. SOS-Карта</span>
+                </div>
+                <p class="text-xs text-gray-400 line-clamp-2">Yandex MapKit. Мгновенная геолокация, строгий фильтр «Открыто 24/7», звонок в клинику в 1 тап.</p>
+              </button>
+            </div>
+
+            <!-- Detailed context box based on selection -->
+            <div id="screenDetailDesc" class="p-4 rounded-xl glass-card border border-white/10 space-y-2 text-xs">
+              <div class="flex items-center justify-between text-brand-300 font-bold">
+                <span id="screenDetailTitle">Экран 1: Главная (Dashboard)</span>
+                <span class="font-mono text-[11px] text-gray-400">Jetpack Compose Scaffold</span>
+              </div>
+              <p id="screenDetailText" class="text-gray-300 leading-relaxed">
+                Шапка профиля с возрастом и весом животного. Виджет ближайших событий с таймерами отложенных задач («Глистогонное: через 5 дней»). Кнопка «+ Взвесить» открывает ModalBottomSheet для молниеносного ввода нового веса.
+              </p>
+              <div class="flex flex-wrap gap-2 pt-1 font-mono text-[10px]">
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-gray-300">Room: PetProfileEntity</span>
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-gray-300">StateFlow: UIState</span>
+                <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300">SOS Button Intent</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Realistic Interactive Mobile Mockup (5 Cols) -->
+          <div class="lg:col-span-5 flex justify-center">
+            <div class="w-[280px] sm:w-[300px] h-[520px] rounded-[38px] bg-dark-base border-[4px] border-gray-700 shadow-2xl relative overflow-hidden flex flex-col">
+              <!-- Phone Island Notch -->
+              <div class="h-6 w-full bg-dark-base flex items-center justify-between px-6 pt-1 z-30 shrink-0">
+                <span class="text-[10px] text-gray-400 font-mono">09:41</span>
+                <div class="w-16 h-3 bg-black rounded-full"></div>
+                <div class="flex items-center gap-1 text-[10px] text-gray-400">
+                  <span>5G</span>
+                  <span>100%</span>
+                </div>
+              </div>
+
+              <!-- Interactive Screen Content Inside Phone -->
+              <div id="mockupScreenContainer" class="flex-1 overflow-y-auto p-3 text-xs space-y-3 bg-[#0c111d] relative">
+                <!-- Content dynamically changed by JS -->
+              </div>
+
+              <!-- Phone Bottom Navigation Bar (Compose Scaffold simulation) -->
+              <div class="h-14 border-t border-white/10 bg-dark-base/95 backdrop-blur flex items-center justify-around px-2 z-30 shrink-0">
+                <button onclick="setMockupScreen('dashboard')" class="flex flex-col items-center gap-0.5 text-gray-400 hover:text-white" id="navIcon-dashboard">
+                  <span class="text-sm">🏠</span>
+                  <span class="text-[9px] font-medium">Главная</span>
+                </button>
+                <button onclick="setMockupScreen('scanner')" class="flex flex-col items-center gap-0.5 text-gray-400 hover:text-white" id="navIcon-scanner">
+                  <span class="text-sm">🔍</span>
+                  <span class="text-[9px] font-medium">Сканер</span>
+                </button>
+                <button onclick="setMockupScreen('health')" class="flex flex-col items-center gap-0.5 text-gray-400 hover:text-white" id="navIcon-health">
+                  <span class="text-sm">📋</span>
+                  <span class="text-[9px] font-medium">Медкарта</span>
+                </button>
+                <button onclick="setMockupScreen('map')" class="flex flex-col items-center gap-0.5 text-gray-400 hover:text-white" id="navIcon-map">
+                  <span class="text-sm">📍</span>
+                  <span class="text-[9px] font-medium">SOS Карта</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 5: TECH STACK & AI PIPELINE ================= -->
+    <div class="slide-container hidden-slide w-full max-w-6xl h-full flex flex-col justify-center" data-slide="5">
+      <div class="space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
+          <div>
+            <div class="text-xs font-mono font-bold uppercase tracking-wider text-accent-cyan mb-1">Инженерный фундамент</div>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Технологический стек & On-Device AI пайплайн
+            </h2>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-accent-cyan/10 border border-accent-cyan/30 text-cyan-300">
+            Native Android Architecture
+          </span>
+        </div>
+
+        <!-- AI Flow Diagram: Camera -> ML Kit -> Room Context -> LLM -->
+        <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-4">
+          <div class="flex items-center justify-between">
+            <h4 class="font-bold text-white text-sm sm:text-base flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-accent-cyan animate-pulse"></span>
+              Контекстно-зависимый пайплайн анализа корма (AI Context Pipeline)
+            </h4>
+            <span class="text-[11px] font-mono text-gray-400 hidden sm:inline">Zero-Hallucination Guardrail</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-center">
+            <div class="p-3 rounded-xl bg-dark-base/80 border border-white/10 flex flex-col justify-between">
+              <div class="text-xs font-mono text-gray-400">1. Захват кадра</div>
+              <div class="text-sm font-bold text-white my-2">CameraX</div>
+              <div class="text-[10px] text-gray-400">Направляющая рамка видоискателя</div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-dark-base/80 border border-brand-500/30 flex flex-col justify-between relative">
+              <span class="text-[9px] font-mono uppercase bg-brand-500/20 text-brand-300 px-1 rounded absolute top-1 right-1">Offline</span>
+              <div class="text-xs font-mono text-brand-400">2. Извлечение текста</div>
+              <div class="text-sm font-bold text-white my-2">Google ML Kit OCR</div>
+              <div class="text-[10px] text-gray-400">Локально на процессоре телефона</div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-dark-base/80 border border-accent-purple/30 flex flex-col justify-between">
+              <div class="text-xs font-mono text-accent-purple">3. Инъекция анамнеза</div>
+              <div class="text-sm font-bold text-white my-2">Room Database</div>
+              <div class="text-[10px] text-gray-400">Возраст, статус кастрации, риск МКБ</div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-dark-base/80 border border-accent-cyan/30 flex flex-col justify-between">
+              <div class="text-xs font-mono text-accent-cyan">4. LLM Ассистент</div>
+              <div class="text-sm font-bold text-white my-2">Диетолог API</div>
+              <div class="text-[10px] text-gray-400">Цветовой вердикт и разбор плюсов/минусов</div>
+            </div>
+          </div>
+
+          <!-- Code / Prompt Inspection Snippet -->
+          <div class="p-3.5 rounded-xl bg-black/60 border border-white/10 font-mono text-xs text-gray-300 overflow-x-auto">
+            <span class="text-purple-400">// Динамическая генерация System Prompt из Room данных:</span><br>
+            <span class="text-cyan-300">val</span> systemPrompt = <span class="text-emerald-300">"""Ты ветеринар-диетолог. Проанализируй корм для: ${pet.name}, ${pet.age} лет, диагноз: ${pet.chronicConditions}. Найди опасные уровни фосфора/магния и аллергены."""</span>
+          </div>
+        </div>
+
+        <!-- Complete Architecture Table from Documentation -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+          <div class="glass-card p-3 rounded-xl border border-white/10 space-y-1">
+            <span class="text-[10px] font-mono text-gray-400 uppercase">UI Слой</span>
+            <div class="font-bold text-white">Jetpack Compose</div>
+            <p class="text-[11px] text-gray-400">Scaffold, NavHost, декларативные анимации</p>
+          </div>
+
+          <div class="glass-card p-3 rounded-xl border border-white/10 space-y-1">
+            <span class="text-[10px] font-mono text-gray-400 uppercase">State Management</span>
+            <div class="font-bold text-white">ViewModel + StateFlow</div>
+            <p class="text-[11px] text-gray-400">Сохранение стейта при поворотах экрана</p>
+          </div>
+
+          <div class="glass-card p-3 rounded-xl border border-white/10 space-y-1">
+            <span class="text-[10px] font-mono text-gray-400 uppercase">Фоновые службы</span>
+            <div class="font-bold text-white">AlarmManager & WorkManager</div>
+            <p class="text-[11px] text-gray-400">Пуш-уведомления без пропуска таймеров</p>
+          </div>
+
+          <div class="glass-card p-3 rounded-xl border border-white/10 space-y-1">
+            <span class="text-[10px] font-mono text-gray-400 uppercase">Геосервисы</span>
+            <div class="font-bold text-white">Yandex MapKit SDK</div>
+            <p class="text-[11px] text-gray-400">Отображение клиник и маршруты в 1 тап</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 6: VALUE & CONCLUSION ================= -->
+    <div class="slide-container hidden-slide w-full max-w-6xl h-full flex flex-col justify-center" data-slide="6">
+      <div class="space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
+          <div>
+            <div class="text-xs font-mono font-bold uppercase tracking-wider text-brand-400 mb-1">Итоги & Перспективы</div>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Ценность проекта и дорожная карта развития
+            </h2>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/10 border border-brand-500/30 text-brand-400">
+            Готовность к реализации
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Card 1 -->
+          <div class="glass-card rounded-2xl p-5 space-y-3 border-t-2 border-t-brand-400">
+            <div class="text-2xl">🌱</div>
+            <h3 class="text-lg font-bold text-white">Для владельца</h3>
+            <ul class="text-xs text-gray-300 space-y-2">
+              <li class="flex items-start gap-2">
+                <span class="text-brand-400 font-bold">✓</span>
+                <span>Экономия до 60 000 ₽ на лечении МКБ за счет превентивного подбора кормов.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-400 font-bold">✓</span>
+                <span>Спокойствие и порядок: календарь прививок всегда синхронизирован.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-400 font-bold">✓</span>
+                <span>Мгновенная помощь в ночной экстренной ситуации без паники.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="glass-card rounded-2xl p-5 space-y-3 border-t-2 border-t-accent-purple">
+            <div class="text-2xl">⚡</div>
+            <h3 class="text-lg font-bold text-white">Для ветеринаров</h3>
+            <ul class="text-xs text-gray-300 space-y-2">
+              <li class="flex items-start gap-2">
+                <span class="text-accent-purple font-bold">✓</span>
+                <span>Чистая хроника симптомов вместо невнятных «он кажется был вялый на прошлой неделе».</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-accent-purple font-bold">✓</span>
+                <span>Точный график динамики веса — первый маркер скрытых онкологий и эндокринологии.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-accent-purple font-bold">✓</span>
+                <span>Быстрый экспорт медкарты для консилиума.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="glass-card rounded-2xl p-5 space-y-3 border-t-2 border-t-accent-cyan">
+            <div class="text-2xl">🚀</div>
+            <h3 class="text-lg font-bold text-white">Roadmap 2.0</h3>
+            <ul class="text-xs text-gray-300 space-y-2">
+              <li class="flex items-start gap-2">
+                <span class="text-accent-cyan font-bold">→</span>
+                <span>Интеграция с умными весами и умными автокормушками по Bluetooth LE.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-accent-cyan font-bold">→</span>
+                <span>Прямая запись на прием в ветклиники через открытые API Yandex Maps.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-accent-cyan font-bold">→</span>
+                <span>Локальная компактная SLM для работы анализатора корма 100% без интернета.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Final CTA Banner with Author Attribution -->
+        <div class="glass-card rounded-2xl p-6 text-center space-y-3 bg-gradient-to-r from-brand-950/40 via-dark-card to-accent-purple/20 border border-white/20">
+          <h3 class="text-2xl font-black text-white">
+            VetPocket — Забота, оцифрованная с любовью к питомцам 🐾
+          </h3>
+          <p class="text-sm text-gray-300 max-w-2xl mx-auto">
+            Проект готов к реализации по технической спецификации на современном стеке Android Jetpack Compose + ML Kit. Спасибо за внимание!
+          </p>
+          
+          <div class="pt-2 pb-1 inline-flex flex-wrap items-center justify-center gap-3 px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-gray-300 font-mono shadow-inner">
+            <span>Выполнила: <strong class="text-white font-bold">Шевцова Варвара Валентиновна</strong></span>
+            <span class="hidden sm:inline text-white/30">•</span>
+            <span class="text-brand-400 font-bold">Группа 53-02</span>
+            <span class="hidden sm:inline text-white/30">•</span>
+            <span>СПб ГБПОУ «Петровский колледж», 2026 г.</span>
+          </div>
+
+          <div class="pt-2 flex flex-wrap justify-center gap-3">
+            <button onclick="goToSlide(1)" class="px-5 py-2.5 rounded-xl font-bold text-xs bg-white/10 hover:bg-white/20 text-white border border-white/20 transition flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              <span>В начало презентации</span>
+            </button>
+            <button onclick="toggleSpeakerNotes()" class="px-5 py-2.5 rounded-xl font-bold text-xs bg-brand-500 hover:bg-brand-400 text-dark-base transition flex items-center gap-2 shadow-lg shadow-brand-500/20">
+              <span>Открыть шпаргалку спикера для защиты</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Presentation Navigation Dock -->
+  <footer class="relative z-30 px-6 py-3 border-t border-white/10 bg-dark-base/85 backdrop-blur-md flex items-center justify-between shrink-0">
+    <div class="flex items-center gap-2">
+      <button onclick="prevSlide()" id="prevSlideBtn" class="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white border border-white/10 transition flex items-center gap-1 text-xs font-semibold">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span class="hidden sm:inline">Назад</span>
+      </button>
+
+      <button onclick="nextSlide()" id="nextSlideBtn" class="px-4 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-dark-base font-bold transition flex items-center gap-1 text-xs shadow-lg shadow-brand-500/20">
+        <span>Вперед</span>
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Quick Slide Switcher Pill -->
+    <div class="flex items-center gap-1">
+      <button onclick="goToSlide(1)" class="slide-nav-pill px-2.5 py-1 rounded-lg text-xs font-mono font-semibold transition" data-slide-target="1">01</button>
+      <button onclick="goToSlide(2)" class="slide-nav-pill px-2.5 py-1 rounded-lg text-xs font-mono font-semibold transition" data-slide-target="2">02</button>
+      <button onclick="goToSlide(3)" class="slide-nav-pill px-2.5 py-1 rounded-lg text-xs font-mono font-semibold transition" data-slide-target="3">03</button>
+      <button onclick="goToSlide(4)" class="slide-nav-pill px-2.5 py-1 rounded-lg text-xs font-mono font-semibold transition" data-slide-target="4">04</button>
+      <button onclick="goToSlide(5)" class="slide-nav-pill px-2.5 py-1 rounded-lg text-xs font-mono font-semibold transition" data-slide-target="5">05</button>
+      <button onclick="goToSlide(6)" class="slide-nav-pill px-2.5 py-1 rounded-lg text-xs font-mono font-semibold transition" data-slide-target="6">06</button>
+    </div>
+
+    <!-- Help Keyboard Hint -->
+    <div class="hidden md:flex items-center gap-2 text-xs text-gray-400">
+      <span class="inline-flex items-center gap-1 font-mono">
+        <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-gray-300">←</kbd>
+        <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-gray-300">→</kbd> слайды
+      </span>
+      <span>•</span>
+      <span class="inline-flex items-center gap-1 font-mono">
+        <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-gray-300">F</kbd> full screen
+      </span>
+    </div>
+  </footer>
+
+  <!-- Speaker Notes Side Drawer -->
+  <aside id="speakerNotesDrawer" class="fixed inset-y-0 right-0 w-full sm:w-[440px] bg-dark-card/95 backdrop-blur-xl border-l border-white/10 z-50 transform translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
+    <div class="p-4 border-b border-white/10 flex items-center justify-between bg-dark-base/50">
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-brand-400"></span>
+        <h3 class="font-bold text-white text-sm">Шпаргалка спикера для защиты</h3>
+      </div>
+      <button onclick="toggleSpeakerNotes()" class="p-1 rounded-lg text-gray-400 hover:text-white hover:bg-white/10">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="p-4 bg-brand-500/10 border-b border-brand-500/20 text-xs text-brand-300">
+      💡 <strong>Подсказка для защиты:</strong> Текст синхронизируется автоматически при переключении слайдов.
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-5 space-y-4 text-sm text-gray-200 leading-relaxed font-sans" id="notesContent">
+      <!-- Dynamic notes content inserted by JS based on active slide -->
+    </div>
+
+    <div class="p-4 border-t border-white/10 bg-dark-base/60 flex items-center justify-between text-xs text-gray-400 font-mono">
+      <span id="notesCurrentSlideIndicator">Слайд 1 из 6</span>
+      <button onclick="copyCurrentNote()" class="text-brand-400 hover:underline">Скопировать речь</button>
+    </div>
+  </aside>
+
+  <script>
+    const totalSlides = 6;
+    let currentSlide = 1;
+    let soundEnabled = true;
+
+    // Speaking notes updated with personal introduction
+    const speakerNotesData = {
+      1: {
+        title: "Слайд 1: Введение и визитная карточка",
+        speech: `«Здравствуйте, уважаемые преподаватели и одногруппники! Меня зовут Шевцова Варвара Валентиновна, студентка группы 53-02 Петровского колледжа. 
+
+Представляю проект по курсу инструментальных средств разработки — VetPocket. Это нативное мобильное Android-приложение, созданное как интеллектуальный карманный хаб здоровья питомца. 
+
+Почему именно мобильное приложение и Kotlin? Потому что здоровье кота или собаки требует действий «здесь и сейчас» — в зоомагазине, дома у весов или ночью при внезапном недомогании. Мы используем современный стек Android-разработки — Jetpack Compose, Room и интеграцию локального распознавания текста вместе с нейросетевым ассистентом. Сейчас я покажу, какую проблему решает продукт и как устроена его архитектура.»`
+      },
+      2: {
+        title: "Слайд 2: Проблема и актуальность",
+        speech: `«Почему приложение вообще должно существовать? Мы выявили три критические боли:
+
+Во-первых, составы кормов. Более 70% владельцев не имеют ветеринарного образования и верят ярким наклейкам «Премиум». При этом у кастрированных котов избыток магния и фосфора в обычном корме быстро провоцирует мочекаменную болезнь.
+
+Во-вторых, потеря контроля. Бумажный ветпаспорт лежит дома, даты дегельминтизации забываются, а график веса не ведется вообще, хотя резкая потеря веса у животного — главный ранний симптом тяжелых скрытых патологий.
+
+В-третьих, экстренные ситуации. В 3 часа ночи при отравлении человек тратит драгоценные минуты на поиск работающей клиники. VetPocket решает эту триаду проблем в одном карманном решении.»`
+      },
+      3: {
+        title: "Слайд 3: Целевая аудитория и Персона",
+        speech: `«Наша целевая аудитория делится на три сегмента:
+1. Осознанные владельцы, для которых питомец — полноценный член семьи.
+2. Владельцы питомцев с хроническими заболеваниями (МКБ, аллергии, диабет), где каждая ошибка в рационе стоит дорого.
+3. Занятые горожане, которым нужен надежный автоматический планировщик.
+
+В технической спецификации мы спроектировали приложение на примере реального кота Ахиллеса: 5 лет, кастрирован, склонность к МКБ. Наше приложение учитывает этот контекст в каждой функции — от подсказок по весу до персонализированного сканирования корма.»`
+      },
+      4: {
+        title: "Слайд 4: 4 ключевых экрана (Демо)",
+        speech: `«Приложение построено на классической и удобной архитектуре из 4 экранов в Bottom Navigation:
+
+1. Главный экран (Dashboard) — экспресс-сводка, таймеры прививок, быстрый ввод веса в шторке BottomSheet и большая тревожная кнопка SOS.
+2. AI-сканер корма — через CameraX захватывается упаковка, Google ML Kit на лету распознает текст, а LLM сверяет его с медкартой и выдает цветовой вердикт.
+3. Цифровая медкарта — три вкладки: прививки с авто-напоминаниями через AlarmManager, интерактивный график веса Vico и хроника симптомов.
+4. SOS-карта — интеграция с Yandex MapKit с жестким фильтром «Открыто 24/7» и кнопкой экстренного вызова.»`
+      },
+      5: {
+        title: "Слайд 5: Технологический стек и AI-контекст",
+        speech: `«С инженерной точки зрения ключевая фишка — в On-Device ML и контекстной зависимости. 
+
+Мы не шлем сырые фото на сервер. Google ML Kit распознает текст прямо на процессоре смартфона без интернета. Затем приложение берет из базы данных Room профиль конкретного кота (например, риск МКБ) и динамически формирует System Prompt для LLM. 
+
+За счет этого нейросеть дает не абстрактный ответ из Википедии, а конкретный вердикт: «Внимание, в этом корме фосфор 1.3%, для Ахиллеса с риском МКБ он не рекомендуется». Стек — Kotlin, Jetpack Compose, ViewModel, StateFlow, Room и AlarmManager.»`
+      },
+      6: {
+        title: "Слайд 6: Ценность, экономика и планы",
+        speech: `«В заключение: ценность проекта измеряется и в здоровье, и в деньгах. Предотвращение рецидива МКБ экономит владельцу десятки тысяч рублей на стационаре и операциях. 
+
+Для ветеринаров приложение дает прозрачный анамнез и график веса. В дальнейшем мы планируем поддержать прямую запись в клиники и интеграцию с Bluetooth-весами.
+
+Приложение полностью готово к реализации согласно технической спецификации. 
+
+Доклад окончен. Шевцова Варвара, группа 53-02, Петровский колледж, 2026 год. Буду рада ответить на ваши вопросы!»`
+      }
+    };
+
+    let audioCtx = null;
+    function playUiSound(type = 'click') {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        const now = audioCtx.currentTime;
+
+        if (type === 'click') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(800, now);
+          osc.frequency.exponentialRampToValueAtTime(400, now + 0.05);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        } else if (type === 'slide') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(320, now);
+          osc.frequency.exponentialRampToValueAtTime(540, now + 0.08);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        }
+      } catch (e) {}
+    }
+
+    function updateSlideView() {
+      document.querySelectorAll('.slide-container').forEach(el => {
+        const slideNum = parseInt(el.getAttribute('data-slide'));
+        if (slideNum === currentSlide) {
+          el.classList.remove('hidden-slide');
+          el.classList.add('active-slide');
+        } else {
+          el.classList.add('hidden-slide');
+          el.classList.remove('active-slide');
+        }
+      });
+
+      document.getElementById('slideCounterText').textContent = `0${currentSlide} / 0${totalSlides}`;
+      const progressPercent = (currentSlide / totalSlides) * 100;
+      document.getElementById('topProgressBar').style.width = `${progressPercent}%`;
+
+      document.querySelectorAll('.slide-nav-pill').forEach(pill => {
+        const target = parseInt(pill.getAttribute('data-slide-target'));
+        if (target === currentSlide) {
+          pill.className = 'slide-nav-pill px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-brand-500 text-dark-base shadow';
+        } else {
+          pill.className = 'slide-nav-pill px-2.5 py-1 rounded-lg text-xs font-mono font-medium text-gray-400 hover:text-white bg-white/5 hover:bg-white/10';
+        }
+      });
+
+      const dotContainer = document.getElementById('dotIndicators');
+      dotContainer.innerHTML = '';
+      for (let i = 1; i <= totalSlides; i++) {
+        const dot = document.createElement('div');
+        dot.className = `w-2 h-2 rounded-full transition-all cursor-pointer ${
+          i === currentSlide ? 'w-5 bg-brand-400' : 'bg-white/20 hover:bg-white/40'
+        }`;
+        dot.onclick = () => goToSlide(i);
+        dotContainer.appendChild(dot);
+      }
+
+      const prevBtn = document.getElementById('prevSlideBtn');
+      if (currentSlide === 1) {
+        prevBtn.classList.add('opacity-40', 'cursor-not-allowed');
+      } else {
+        prevBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+      }
+
+      updateSpeakerNotesUI();
+    }
+
+    function goToSlide(n) {
+      if (n >= 1 && n <= totalSlides && n !== currentSlide) {
+        currentSlide = n;
+        playUiSound('slide');
+        updateSlideView();
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        playUiSound('slide');
+        updateSlideView();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        playUiSound('slide');
+        updateSlideView();
+      }
+    }
+
+    function updateSpeakerNotesUI() {
+      const note = speakerNotesData[currentSlide];
+      const notesContentEl = document.getElementById('notesContent');
+      const notesIndicator = document.getElementById('notesCurrentSlideIndicator');
+
+      if (note && notesContentEl) {
+        notesContentEl.innerHTML = `
+          <div class="space-y-3">
+            <h4 class="font-bold text-brand-300 text-base">${note.title}</h4>
+            <div class="p-4 rounded-xl bg-dark-base/80 border border-white/10 text-gray-100 whitespace-pre-line leading-relaxed text-[14px]">
+              ${note.speech}
+            </div>
+          </div>
+        `;
+        notesIndicator.textContent = `Слайд ${currentSlide} из ${totalSlides}`;
+      }
+    }
+
+    function toggleSpeakerNotes() {
+      playUiSound('click');
+      const drawer = document.getElementById('speakerNotesDrawer');
+      drawer.classList.toggle('translate-x-full');
+    }
+
+    function copyCurrentNote() {
+      const note = speakerNotesData[currentSlide];
+      if (note) {
+        const dummy = document.createElement('textarea');
+        dummy.value = note.speech;
+        document.body.appendChild(dummy);
+        dummy.select();
+        document.execCommand('copy');
+        document.body.removeChild(dummy);
+
+        const btn = event.target;
+        const originalText = btn.textContent;
+        btn.textContent = 'Скопировано! ✓';
+        btn.classList.add('text-brand-400');
+        setTimeout(() => {
+          btn.textContent = originalText;
+        }, 1500);
+      }
+    }
+
+    const mockupScreens = {
+      dashboard: `
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between p-2.5 rounded-2xl bg-white/5 border border-white/10">
+            <div class="flex items-center gap-2">
+              <div class="w-9 h-9 rounded-xl bg-amber-500/30 flex items-center justify-center text-lg">🐱</div>
+              <div>
+                <div class="font-bold text-white text-xs">Ахиллес</div>
+                <div class="text-[10px] text-gray-400">5 лет • 4.8 кг</div>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-amber-500/20 text-amber-300">МКБ</span>
+          </div>
+
+          <div class="flex gap-2">
+            <button class="flex-1 py-2 px-2.5 rounded-xl bg-brand-500/20 border border-brand-500/40 text-brand-300 font-bold text-[10px] flex items-center justify-center gap-1.5 hover:bg-brand-500/30">
+              <span>+ Взвесить</span>
+            </button>
+            <button class="py-2 px-2.5 rounded-xl bg-white/5 border border-white/10 text-gray-300 text-[10px]">
+              Дневник
+            </button>
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="text-[10px] font-mono text-gray-400 uppercase font-semibold">Ближайшие события</div>
+            
+            <div class="p-2.5 rounded-xl bg-dark-card border border-white/10 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-sm">💊</span>
+                <div>
+                  <div class="font-bold text-white text-[11px]">Глистогонное (Мильбемакс)</div>
+                  <div class="text-[9px] text-brand-400">Через 5 дней (18 мая)</div>
+                </div>
+              </div>
+              <span class="text-[9px] font-mono text-gray-400">0.5 табл</span>
+            </div>
+
+            <div class="p-2.5 rounded-xl bg-dark-card border border-white/10 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-sm">💉</span>
+                <div>
+                  <div class="font-bold text-white text-[11px]">Комплексная вакцина</div>
+                  <div class="text-[9px] text-accent-cyan">Через 2 месяца</div>
+                </div>
+              </div>
+              <span class="text-[9px] font-mono text-gray-400">Пуш вкл</span>
+            </div>
+          </div>
+
+          <div class="pt-1">
+            <div class="w-full py-3 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-700 text-white font-extrabold text-[11px] flex items-center justify-center gap-2 shadow-lg shadow-rose-900/40">
+              <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+              SOS КЛИНИКИ 24/7
+            </div>
+          </div>
+        </div>
+      `,
+
+      scanner: `
+        <div class="space-y-2.5">
+          <div class="relative h-44 rounded-2xl bg-gray-900 border border-brand-500/50 overflow-hidden flex flex-col justify-between p-2.5">
+            <div class="absolute inset-4 border-2 border-dashed border-brand-400/80 rounded-xl pointer-events-none"></div>
+            <div class="absolute inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-brand-400 to-transparent animate-scanline"></div>
+
+            <div class="flex justify-between items-center z-10">
+              <span class="px-2 py-0.5 rounded-full bg-black/60 text-brand-400 text-[9px] font-mono">CameraX Active</span>
+              <span class="text-[9px] text-gray-300 bg-black/60 px-1.5 py-0.5 rounded">Вспышка</span>
+            </div>
+
+            <div class="text-center z-10 bg-black/70 p-1 rounded-lg backdrop-blur text-[10px] text-gray-200">
+              Наведите рамку на состав корма
+            </div>
+          </div>
+
+          <div class="p-2.5 rounded-xl bg-dark-card border border-rose-500/40 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold text-rose-400 flex items-center gap-1">
+                🔴 С ОСТОРОЖНОСТЬЮ
+              </span>
+              <span class="text-[9px] font-mono text-gray-400">ML Kit + LLM</span>
+            </div>
+            <p class="text-[10px] text-gray-300 leading-snug">
+              Обнаружен уровень фосфора <strong>1.4%</strong>. Для Ахиллеса с риском МКБ допустимо не более <strong>0.8%</strong>.
+            </p>
+            <div class="text-[9px] text-brand-400 pt-0.5 font-mono">
+              Рекомендация: Выбрать линейку Urinary Care
+            </div>
+          </div>
+        </div>
+      `,
+
+      health: `
+        <div class="space-y-2.5">
+          <div class="flex bg-white/5 p-0.5 rounded-lg text-[9px] font-medium text-center">
+            <div class="flex-1 py-1 rounded bg-brand-500/20 text-brand-300 font-bold">Прививки</div>
+            <div class="flex-1 py-1 text-gray-400">Вес (Vico)</div>
+            <div class="flex-1 py-1 text-gray-400">Хроника</div>
+          </div>
+
+          <div class="p-2.5 rounded-xl bg-dark-card border border-white/10 space-y-1.5">
+            <div class="flex justify-between text-[10px]">
+              <span class="text-gray-400">Динамика веса</span>
+              <span class="text-white font-mono font-bold">4.85 кг</span>
+            </div>
+            <svg class="w-full h-16" viewBox="0 0 200 60">
+              <path d="M 10 45 Q 60 40 100 25 T 190 18" fill="none" stroke="#10b981" stroke-width="2.5" />
+              <circle cx="10" cy="45" r="3" fill="#10b981" />
+              <circle cx="100" cy="25" r="3" fill="#10b981" />
+              <circle cx="190" cy="18" r="4" fill="#34d399" />
+            </svg>
+            <div class="flex justify-between text-[8px] font-mono text-gray-500">
+              <span>Янв</span>
+              <span>Фев</span>
+              <span>Март</span>
+              <span>Апр</span>
+            </div>
+          </div>
+
+          <div class="p-2 rounded-xl bg-white/5 border border-white/10 space-y-1">
+            <div class="flex justify-between text-[9px] text-gray-400">
+              <span>12 апреля • 19:40</span>
+              <span class="text-amber-400">Симптом</span>
+            </div>
+            <p class="text-[10px] text-gray-200">«Вялый после еды, срыгнул шерстью. Наблюдаем.»</p>
+          </div>
+        </div>
+      `,
+
+      map: `
+        <div class="space-y-2">
+          <div class="relative h-44 rounded-2xl bg-slate-900 border border-white/10 overflow-hidden flex flex-col justify-between p-2">
+            <svg class="absolute inset-0 w-full h-full opacity-30" viewBox="0 0 200 200">
+              <path d="M 0 50 Q 80 70 200 40" stroke="#475569" stroke-width="6" fill="none" />
+              <path d="M 50 0 Q 70 100 60 200" stroke="#475569" stroke-width="6" fill="none" />
+              <path d="M 140 0 L 130 200" stroke="#475569" stroke-width="4" fill="none" />
+            </svg>
+
+            <div class="absolute top-12 left-16 flex items-center gap-1 z-10">
+              <div class="w-5 h-5 rounded-full bg-rose-500 flex items-center justify-center text-[10px] shadow-lg animate-bounce">🏥</div>
+              <span class="bg-black/80 px-1 py-0.5 rounded text-[8px] text-white">ВетЦентр 24/7 (350м)</span>
+            </div>
+
+            <div class="absolute bottom-10 right-10 z-10">
+              <div class="w-4 h-4 rounded-full bg-cyan-500 border-2 border-white"></div>
+            </div>
+
+            <div class="flex justify-between z-10">
+              <span class="px-2 py-0.5 rounded-full bg-emerald-500/90 text-dark-base font-bold text-[9px]">
+                ● Открыто прямо сейчас
+              </span>
+            </div>
+          </div>
+
+          <div class="p-2.5 rounded-xl bg-dark-card border border-white/10 space-y-1.5">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="font-bold text-white text-[11px]">Круглосуточный ВетЦентр</div>
+                <div class="text-[9px] text-gray-400">ул. Ленина, 42 • 4 мин на авто</div>
+              </div>
+              <span class="text-amber-400 text-[10px] font-bold">★ 4.9</span>
+            </div>
+
+            <div class="flex gap-2 pt-1">
+              <button class="flex-1 py-1.5 rounded-lg bg-brand-500 text-dark-base font-bold text-[9px] text-center">
+                Маршрут
+              </button>
+              <button class="flex-1 py-1.5 rounded-lg bg-white/10 text-white font-bold text-[9px] text-center">
+                Позвонить
+              </button>
+            </div>
+          </div>
+        </div>
+      `
+    };
+
+    const screenDescriptions = {
+      dashboard: {
+        title: "Экран 1: Главная (Dashboard)",
+        text: "Сводка всей ключевой информации: карточка питомца с возрастом и весом, виджет таймеров ближайших событий (дегельминтизация, вакцинация). Кнопка «+ Взвесить» открывает быстрый BottomSheet, а красная кнопка SOS мгновенно открывает навигацию."
+      },
+      scanner: {
+        title: "Экран 2: Анализатор корма (Scanner & AI)",
+        text: "Видоискатель CameraX с направляющей рамкой. Google ML Kit локально (без интернета) считывает текст состава. Распознанный текст обогащается медкартой из базы данных Room и направляется в LLM, выдавая понятный цветовой вердикт 🟢/🟡/🔴."
+      },
+      health: {
+        title: "Экран 3: Медкарта & Календарь (Health Hub)",
+        text: "Три функциональные вкладки: 1) Прививки и обработки с установкой пушей через AlarmManager; 2) График изменения веса на базе Compose-библиотеки Vico (главный индикатор здоровья); 3) Дневник симптомов для визита к ветеринару."
+      },
+      map: {
+        title: "Экран 4: Карта (SOS & Vets Geolocation)",
+        text: "Интеграция с Yandex MapKit. Автоматический поиск ветклиник рядом с вами, критически важный ночной переключатель «Открыто прямо сейчас», построение маршрута и быстрый звонок в один клик без паники."
+      }
+    };
+
+    function setMockupScreen(screenKey) {
+      playUiSound('click');
+      const container = document.getElementById('mockupScreenContainer');
+      const detailTitle = document.getElementById('screenDetailTitle');
+      const detailText = document.getElementById('screenDetailText');
+
+      if (mockupScreens[screenKey]) {
+        container.innerHTML = mockupScreens[screenKey];
+      }
+
+      if (screenDescriptions[screenKey]) {
+        detailTitle.textContent = screenDescriptions[screenKey].title;
+        detailText.textContent = screenDescriptions[screenKey].text;
+      }
+
+      document.querySelectorAll('.screen-tab-btn').forEach(btn => {
+        btn.classList.remove('border-brand-500', 'bg-brand-500/10');
+        btn.classList.add('border-white/10');
+      });
+      const activeBtn = document.getElementById(`tabBtn-${screenKey}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('border-white/10');
+        activeBtn.classList.add('border-brand-500', 'bg-brand-500/10');
+      }
+
+      ['dashboard', 'scanner', 'health', 'map'].forEach(key => {
+        const iconBtn = document.getElementById(`navIcon-${key}`);
+        if (iconBtn) {
+          if (key === screenKey) {
+            iconBtn.classList.add('text-brand-400');
+            iconBtn.classList.remove('text-gray-400');
+          } else {
+            iconBtn.classList.remove('text-brand-400');
+            iconBtn.classList.add('text-gray-400');
+          }
+        }
+      });
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullscreen();
+      } else if (e.key === 'Escape') {
+        const drawer = document.getElementById('speakerNotesDrawer');
+        if (!drawer.classList.contains('translate-x-full')) {
+          drawer.classList.add('translate-x-full');
+        }
+      } else if (e.key >= '1' && e.key <= '6') {
+        goToSlide(parseInt(e.key));
+      }
+    });
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, false);
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleGesture();
+    }, false);
+
+    function handleGesture() {
+      const swipeDistance = touchEndX - touchStartX;
+      if (Math.abs(swipeDistance) > 60) {
+        if (swipeDistance < 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+      }
+    }
+
+    function toggleFullscreen() {
+      playUiSound('click');
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
+    document.getElementById('toggleNotesBtn').addEventListener('click', toggleSpeakerNotes);
+
+    document.getElementById('soundToggleBtn').addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      document.getElementById('soundIconOn').classList.toggle('hidden', !soundEnabled);
+      document.getElementById('soundIconOff').classList.toggle('hidden', soundEnabled);
+      if (soundEnabled) playUiSound('click');
+    });
+
+    window.addEventListener('load', () => {
+      updateSlideView();
+      setMockupScreen('dashboard');
+    });
+  </script>
+</body>
+</html>
