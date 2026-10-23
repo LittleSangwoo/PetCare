@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>КИБЕР-АНАТОМИЯ: ОЖИВЛЕНИЕ ТИТАНА</title>
+  <!-- Google Fonts: Orbitron & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Orbitron:wght@500;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cyberDark: '#05070e',
+            cyberNavy: '#080d1a',
+            cyberCyan: '#00f3ff',
+            cyberPink: '#ff007f',
+            cyberGreen: '#00ff88',
+            cyberAmber: '#ffaa00',
+            cyberPurple: '#a855f7'
+          },
+          fontFamily: {
+            hud: ['Orbitron', 'sans-serif'],
+            code: ['JetBrains Mono', 'monospace'],
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Cyberpunk Scanlines & Vignette */
+    body {
+      background-color: #05070e;
+      color: #e2e8f0;
+      overflow: hidden;
+      user-select: none;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .scanlines {
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      background-size: 100% 3px, 6px 100%;
+      pointer-events: none;
+    }
+
+    .cyber-border {
+      position: relative;
+      background: rgba(8, 13, 26, 0.85);
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      box-shadow: 0 0 25px rgba(0, 243, 255, 0.1), inset 0 0 15px rgba(0, 243, 255, 0.05);
+      clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+    }
+
+    .cyber-btn {
+      position: relative;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    }
+    .cyber-btn:hover {
+      box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
+      transform: translateY(-2px);
+    }
+    .cyber-btn:active {
+      transform: translateY(1px);
+    }
+
+    .neon-text-cyan {
+      text-shadow: 0 0 8px rgba(0, 243, 255, 0.7), 0 0 20px rgba(0, 243, 255, 0.4);
+    }
+    .neon-text-pink {
+      text-shadow: 0 0 8px rgba(255, 0, 127, 0.7), 0 0 20px rgba(255, 0, 127, 0.4);
+    }
+    .neon-text-green {
+      text-shadow: 0 0 8px rgba(0, 255, 136, 0.7), 0 0 20px rgba(0, 255, 136, 0.4);
+    }
+
+    /* Custom range slider */
+    input[type=range] {
+      -webkit-appearance: none;
+      background: rgba(0, 243, 255, 0.15);
+      height: 8px;
+      border-radius: 4px;
+      outline: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      background: #00f3ff;
+      cursor: pointer;
+      box-shadow: 0 0 12px #00f3ff;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #00f3ff44;
+      border-radius: 3px;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.8; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.02); filter: drop-shadow(0 0 15px #00f3ff); }
+    }
+    .animate-pulse-glow {
+      animation: pulseGlow 2.5s infinite;
+    }
+  @keyframes fxIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+.fx-in{animation:fxIn .45s ease-out}
+@keyframes glitch{0%,90%,100%{transform:none;text-shadow:none}92%{transform:translate(-2px,1px);text-shadow:2px 0 #ff007f,-2px 0 #00f3ff}96%{transform:translate(2px,-1px);text-shadow:-2px 0 #ff007f,2px 0 #00f3ff}}
+.glitch{animation:glitch 3s infinite}
+.gcard{background:rgba(8,13,26,.9);border:1px solid #1f2a44;border-radius:10px;transition:.15s;cursor:pointer}
+.gcard:hover{border-color:#00f3ff;box-shadow:0 0 14px #00f3ff55;transform:translateY(-2px)}
+.gcard:disabled{cursor:default;opacity:.9}
+@keyframes conf{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+.conf{position:fixed;top:-30px;z-index:60;font-size:26px;pointer-events:none;animation:conf 2.6s ease-in forwards}
+</style>
+</head>
+<body class="w-screen h-screen relative flex flex-col justify-between overflow-hidden bg-cyberDark text-white select-none">
+
+  <!-- Interactive Matrix/Circuit Background Canvas -->
+  <canvas id="bgCanvas" class="absolute inset-0 pointer-events-none z-0 opacity-40"></canvas>
+  <div class="scanlines absolute inset-0 z-10 pointer-events-none" id="scanlinesOverlay"></div>
+
+  <!-- TOP HUD BAR -->
+  <header class="relative z-20 flex items-center justify-between px-6 py-3 border-b border-cyberCyan/20 bg-cyberNavy/80 backdrop-blur-md">
+    <div class="flex items-center gap-4">
+      <div class="flex items-center gap-2 text-cyberCyan font-hud font-bold tracking-widest text-lg neon-text-cyan">
+        <i class="fa-solid fa-microchip animate-spin" style="animation-duration: 8s;"></i>
+        <span>TITAN//SYSTEM v5.0</span>
+      </div>
+      <div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded bg-cyberCyan/10 border border-cyberCyan/30 text-xs font-code text-cyberCyan">
+        <span class="w-2 h-2 rounded-full bg-cyberGreen animate-ping"></span>
+        <span id="systemStatusText">CORE: STANDBY</span>
+      </div>
+    </div>
+
+    <!-- QUEST INVENTORY BADGES -->
+    <div class="hidden md:flex items-center gap-2" id="inventoryContainer">
+      <div id="inv-mobo" title="Материнская плата" class="w-8 h-8 rounded border border-gray-700 bg-gray-900/50 flex items-center justify-center text-xs text-gray-500 transition-all"><i class="fa-solid fa-chess-board"></i></div>
+      <div id="inv-cpu" title="Процессор CPU" class="w-8 h-8 rounded border border-gray-700 bg-gray-900/50 flex items-center justify-center text-xs text-gray-500 transition-all"><i class="fa-solid fa-microchip"></i></div>
+      <div id="inv-cooler" title="Кулер" class="w-8 h-8 rounded border border-gray-700 bg-gray-900/50 flex items-center justify-center text-xs text-gray-500 transition-all"><i class="fa-solid fa-fan"></i></div>
+      <div id="inv-ram" title="Оперативка RAM" class="w-8 h-8 rounded border border-gray-700 bg-gray-900/50 flex items-center justify-center text-xs text-gray-500 transition-all"><i class="fa-solid fa-memory"></i></div>
+      <div id="inv-ssd" title="Диск SSD" class="w-8 h-8 rounded border border-gray-700 bg-gray-900/50 flex items-center justify-center text-xs text-gray-500 transition-all"><i class="fa-solid fa-hard-drive"></i></div>
+      <div id="inv-gpu" title="Видеокарта GPU" class="w-8 h-8 rounded border border-gray-700 bg-gray-900/50 flex items-center justify-center text-xs text-gray-500 transition-all"><i class="fa-solid fa-vr-cardboard"></i></div>
+      <div id="inv-psu" title="Блок питания PSU" class="w-8 h-8 rounded border border-gray-700 bg-gray-900/50 flex items-center justify-center text-xs text-gray-500 transition-all"><i class="fa-solid fa-bolt"></i></div>
+    </div>
+
+    <!-- ACTION CONTROLS -->
+    <div class="flex items-center gap-3">
+      <!-- Teacher's Guide Toggle -->
+      <button id="teacherBtn" class="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-hud tracking-wider bg-cyberPurple/20 border border-cyberPurple/50 text-cyberPurple hover:bg-cyberPurple hover:text-white transition" title="Шпаргалка учителя и действия с компом (T)">
+        <i class="fa-solid fa-chalkboard-user"></i>
+        <span class="hidden sm:inline">ГИД УЧИТЕЛЯ [T]</span>
+      </button>
+
+      <!-- Audio Mute/Unmute Toggle -->
+      <button id="audioBtn" class="px-3 py-1.5 rounded text-xs font-hud tracking-wider bg-cyberCyan/10 border border-cyberCyan/40 text-cyberCyan hover:bg-cyberCyan hover:text-cyberDark transition">
+        <i class="fa-solid fa-volume-high" id="audioIcon"></i>
+      </button>
+
+      <!-- Fullscreen Toggle -->
+      <button id="fullscreenBtn" class="px-3 py-1.5 rounded text-xs font-hud tracking-wider bg-cyberCyan/10 border border-cyberCyan/40 text-cyberCyan hover:bg-cyberCyan hover:text-cyberDark transition">
+        <i class="fa-solid fa-expand"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- BOOT SEQUENCE PROGRESS BAR -->
+  <div class="relative z-20 w-full bg-cyberNavy/90 h-2 border-b border-cyberCyan/20">
+    <div id="progressBar" class="h-full bg-gradient-to-r from-cyberCyan via-cyberGreen to-cyberPink transition-all duration-500 shadow-[0_0_12px_#00f3ff]" style="width: 6.66%;"></div>
+  </div>
+
+  <!-- MAIN SLIDES STAGE CONTAINER -->
+  <main class="relative z-20 flex-1 flex items-center justify-center p-4 sm:p-8 max-w-7xl mx-auto w-full overflow-hidden">
+    <div id="slideViewport" class="w-full h-full relative flex items-center justify-center">
+      <!-- Slides are injected/rendered dynamically here -->
+    </div>
+  </main>
+
+  <!-- BOTTOM HUD CONTROLS & NAV -->
+  <footer class="relative z-20 flex items-center justify-between px-6 py-3 border-t border-cyberCyan/20 bg-cyberNavy/90 backdrop-blur-md">
+    <div class="flex items-center gap-3">
+      <span class="font-hud text-xs text-cyberCyan/70">СЕКТОР:</span>
+      <span id="slideCounter" class="font-code font-bold text-cyberCyan text-sm">01 / 15</span>
+      <span id="slideTitleMin" class="hidden md:inline font-hud text-xs text-gray-400 border-l border-gray-700 pl-3">ПРОЛОГ: СБОЙ СИСТЕМЫ</span>
+    </div>
+
+    <!-- Navigation buttons -->
+    <div class="flex items-center gap-4">
+      <button id="prevBtn" class="cyber-btn px-6 py-2 bg-gray-800/80 hover:bg-gray-700 border border-gray-600 text-xs font-hud tracking-wider text-gray-300 disabled:opacity-30 disabled:pointer-events-none">
+        <i class="fa-solid fa-chevron-left mr-1"></i> НАЗАД
+      </button>
+
+      <button id="nextBtn" class="cyber-btn px-8 py-2.5 bg-gradient-to-r from-cyberCyan to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-cyberDark font-hud font-black tracking-widest text-sm shadow-[0_0_15px_rgba(0,243,255,0.4)]">
+        ДАЛЕЕ <i class="fa-solid fa-chevron-right ml-1"></i>
+      </button>
+    </div>
+  </footer>
+
+  <!-- TEACHER's GUIDE MODAL DRAWER -->
+  <div id="teacherDrawer" class="fixed inset-y-0 right-0 w-full sm:w-[460px] bg-[#070b16]/95 border-l-2 border-cyberPurple backdrop-blur-xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col p-6 shadow-2xl">
+    <div class="flex items-center justify-between pb-4 border-b border-cyberPurple/30">
+      <div class="flex items-center gap-2 text-cyberPurple font-hud font-bold">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>ИНСТРУКЦИЯ ПРЕПОДАВАТЕЛЯ</span>
+      </div>
+      <button id="closeTeacherBtn" class="text-gray-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto py-4 space-y-5 text-sm font-sans" id="teacherContent">
+      <!-- Injected per slide -->
+    </div>
+
+    <div class="pt-4 border-t border-cyberPurple/20 text-xs font-code text-gray-400 flex items-center justify-between">
+      <span>Нажмите [T] для скрытия</span>
+      <span class="text-cyberPurple">Индивидуальный урок 30 мин</span>
+    </div>
+  </div>
+
+  <!-- Web Audio Synthesizer Engine & Logic Script -->
+  <script>
+    // ==========================================
+    // 1. SOUND FX ENGINE (Web Audio API)
+    // ==========================================
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.muted = false;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioContext();
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+      playClick() {
+        if (this.muted) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1400, this.ctx.currentTime + 0.05);
+        gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.05);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.05);
+      }
+      playBuzzer() {
+        if (this.muted) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, this.ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(80, this.ctx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.2);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.2);
+      }
+      playPowerUp() {
+        if (this.muted) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.6);
+        gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.6);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.6);
+      }
+      playFanfare() {
+        if (this.muted) return;
+        this.init();
+        const notes = [440, 554, 659, 880];
+        notes.forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.12);
+          gain.gain.setValueAtTime(0.2, this.ctx.currentTime + idx * 0.12);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + idx * 0.12 + 0.3);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(this.ctx.currentTime + idx * 0.12);
+          osc.stop(this.ctx.currentTime + idx * 0.12 + 0.3);
+        });
+      }
+      playTyping() {
+        if (this.muted) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(1200 + Math.random() * 400, this.ctx.currentTime);
+        gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.03);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.03);
+      }
+    }
+    const audio = new SoundEngine();
+
+    // ==========================================
+    // 2. BACKGROUND CANVAS (Pulsing Grid / Circuit)
+    // ==========================================
+    const bgCanvas = document.getElementById('bgCanvas');
+    const ctx = bgCanvas.getContext('2d');
+    let width = bgCanvas.width = window.innerWidth;
+    let height = bgCanvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      width = bgCanvas.width = window.innerWidth;
+      height = bgCanvas.height = window.innerHeight;
+    });
+
+    const particles = [];
+    for (let i = 0; i < 45; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.6,
+        vy: (Math.random() - 0.5) * 0.6,
+        size: Math.random() * 2 + 1
+      });
+    }
+
+    function renderBg() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.strokeStyle = 'rgba(0, 243, 255, 0.04)';
+      ctx.lineWidth = 1;
+
+      // Draw subtle grid
+      const step = 60;
+      for (let x = 0; x < width; x += step) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < height; y += step) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+
+      // Draw floating nodes & connections
+      ctx.fillStyle = '#00f3ff';
+      particles.forEach((p, idx) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        for (let j = idx + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+          if (dist < 120) {
+            ctx.strokeStyle = `rgba(0, 243, 255, ${0.15 * (1 - dist / 120)})`;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        }
+      });
+      requestAnimationFrame(renderBg);
+    }
+    renderBg();
+
+    // ==========================================
+    // 3. SLIDES & TEACHER GUIDE DATA
+    // ==========================================
+    const slidesData = [
+      // SLIDE 1
+      {
+        id: 1,
+        title: "ПРОЛОГ: СБОЙ СИСТЕМЫ",
+        invKey: null,
+        render: () => `
+          <div class="cyber-border w-full p-8 md:p-12 text-center flex flex-col items-center justify-center max-w-4xl animate-fadeIn">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/40 text-red-400 font-code text-xs mb-6 tracking-widest animate-pulse">
+              <i class="fa-solid fa-triangle-exclamation"></i> КРИТИЧЕСКИЙ СБОЙ: ПИТАНИЕ ОТКЛЮЧЕНО
+            </div>
+            <h1 class="font-hud font-black text-3xl md:text-5xl text-white tracking-wider mb-4 leading-tight">
+              КИБЕР-АНАТОМИЯ:<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-cyberCyan via-teal-300 to-cyberPink neon-text-cyan">ОЖИВЛЕНИЕ ТИТАНА</span>
+            </h1>
+            <p class="font-sans text-gray-300 text-base md:text-lg max-w-2xl mb-8 leading-relaxed">
+              Перед нами заснувший суперкомпьютер. Наш старый боевой ПК в классе полностью разобран. Твоя миссия — за 30 минут изучить каждый орган машины, собрать узлы воедино и запустить сердце Титана кодом на Python!
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center">
+              <button onclick="nextSlide()" class="cyber-btn px-8 py-3.5 bg-cyberCyan hover:bg-cyan-400 text-cyberDark font-hud font-black text-sm tracking-widest shadow-[0_0_20px_rgba(0,243,255,0.6)]">
+                <i class="fa-solid fa-power-off mr-2"></i> НАЧАТЬ ДИАГНОСТИКУ
+              </button>
+            </div>
+          </div>
+        `,
+        teacher: `
+          <div class="space-y-3">
+            <h4 class="font-hud text-cyberPurple font-bold">🎯 ЦЕЛЬ СЛАЙДА:</h4>
+            <p>Заинтриговать пятиклассника, вовлечь в сюжет кибер-миссии. Ребенок не «учит скучные детали», а спасает шаттл.</p>
+            <h4 class="font-hud text-cyberCyan font-bold">🗣 ЧТО СКАЗАТЬ:</h4>
+            <p class="italic text-gray-300">«Смотри на стол. Это наш Титан. Сейчас это просто холодный железный ящик. Чтобы заставить его летать и играть в игры, мы должны оживить его изнутри!»</p>
+            <h4 class="font-hud text-cyberGreen font-bold">🛠 ПРАКТИКА В КЛАССЕ:</h4>
+            <p>Поставить перед учеником старый закрытый системный блок. Показать отвертку. Дать понять, что сегодня он будет крутить винты сам.</p>
+          </div>
+        `
+      },
+
+      // SLIDE 2 - MOTHERBOARD
+      {
+        id: 2,
+        title: "МИССИЯ 01: МАТЕРИНСКАЯ ПЛАТА",
+        invKey: "mobo",
+        render: () => `
+          <div class="cyber-border w-full p-6 md:p-8 flex flex-col md:flex-row gap-6 items-center max-w-5xl">
+            <div class="flex-1 space-y-4">
+              <div class="inline-block px-3 py-1 bg-cyberCyan/10 border border-cyberCyan/40 text-cyberCyan text-xs font-code tracking-widest">УЗЕЛ 01 // МАТЕРИНСКАЯ ПЛАТА</div>
+              <h2 class="font-hud text-2xl md:text-3xl font-black text-white">КИБЕР-МЕГАПОЛИС</h2>
+              <p class="text-sm md:text-base text-gray-300">Материнская плата (Motherboard) — огромная равнина с миллионами медных скоростных шоссе (шин данных). Она связывает всех жителей компьютера воедино.</p>
+              
+              <div class="p-3 bg-cyberNavy/80 border border-cyberCyan/20 rounded font-code text-xs space-y-2">
+                <div class="text-cyberGreen font-bold"><i class="fa-solid fa-gamepad mr-1"></i> ИНТЕРАКТИВ: Нажми на сокеты на схеме справа!</div>
+                <div id="moboDetails" class="text-cyberCyan">Статус: выбери сектор на карте...</div>
+              </div>
+            </div>
+
+            <div class="flex-1 w-full flex flex-col items-center">
+              <div class="relative w-72 h-72 bg-[#091122] border-2 border-cyberCyan/40 rounded-lg p-3 shadow-[0_0_20px_rgba(0,243,255,0.2)]">
+                <!-- SVG Circuit Board Visual -->
+                <svg class="w-full h-full" viewBox="0 0 200 200">
+                  <path d="M 20 20 L 80 20 L 90 40 L 170 40" stroke="rgba(0,243,255,0.4)" stroke-width="2" fill="none"/>
+                  <path d="M 30 180 L 100 180 L 120 120 L 180 120" stroke="rgba(0,255,136,0.4)" stroke-width="2" fill="none"/>
+                  <path d="M 20 90 L 70 90 L 90 110" stroke="rgba(255,0,127,0.4)" stroke-width="2" fill="none"/>
+                </svg>
+
+                <!-- Clickable Points -->
+                <button onclick="inspectMobo('cpu')" class="absolute top-16 left-16 w-16 h-16 bg-cyberCyan/20 border-2 border-cyberCyan hover:bg-cyberCyan/40 rounded flex flex-col items-center justify-center text-[10px] font-hud text-cyberCyan">
+                  <i class="fa-solid fa-microchip text-base"></i>
+                  SOCKET
+                </button>
+
+                <button onclick="inspectMobo('ram')" class="absolute top-10 right-6 w-8 h-28 bg-cyberGreen/20 border-2 border-cyberGreen hover:bg-cyberGreen/40 rounded flex flex-col items-center justify-center text-[9px] font-hud text-cyberGreen">
+                  RAM
+                </button>
+
+                <button onclick="inspectMobo('pci')" class="absolute bottom-6 left-12 w-36 h-8 bg-cyberPink/20 border-2 border-cyberPink hover:bg-cyberPink/40 rounded flex items-center justify-center text-[10px] font-hud text-cyberPink gap-1">
+                  <i class="fa-solid fa-bolt"></i> PCI-E
+                </button>
+              </div>
+            </div>
+          </div>
+        `,
+        teacher: `
+          <div class="space-y-3">
+            <h4 class="font-hud text-cyberPurple font-bold">🎯 ЦЕЛЬ:</h4>
+            <p>Объяснить, что все детали вставляются в одну гигантскую зеленую/черную плату, а не висят в воздухе.</p>
+            <h4 class="font-hud text-cyberGreen font-bold">🛠 ДЕЙСТВИЕ РУКАМИ:</h4>
+            <p>1. Откручиваем боковую крышку корпуса (дайте ученику крестовую отвертку).<br>
+            2. Заглядываем внутрь: «Смотри, видишь эти крошечные серебристые дорожки? Это магистрали сигналов!»</p>
+          </div>
+        `
+      },
+
+      // SLIDE 3 - CPU
+      {
+        id: 3,
+        title: "МИССИЯ 02: ПРОЦЕССОР (CPU)",
+        invKey: "cpu",
+        render: () => `
+          <div class="cyber-border w-full p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center max-w-5xl">
+            <div class="flex-1 space-y-4">
+              <div class="inline-block px-3 py-1 bg-cyberAmber/10 border border-cyberAmber/40 text-cyberAmber text-xs font-code tracking-widest">УЗЕЛ 02 // ПРОЦЕССОР</div>
+              <h2 class="font-hud text-2xl md:text-3xl font-black text-white">МОЗГ И ПОЛКОВОДЕЦ</h2>
+              <p class="text-sm md:text-base text-gray-300">Кремниевый кристалл размером с монетку! Внутри него спрятаны миллиарды микроскопических транзисторов. Процессор раздает указания всем остальным деталям.</p>
+              
+              <!-- Frequency Simulator -->
+              <div class="p-4 bg-cyberNavy/90 border border-cyberCyan/30 rounded-lg space-y-3">
+                <div class="flex justify-between items-center text-xs font-hud">
+                  <span class="text-gray-300">ТАКТОВАЯ ЧАСТОТА:</span>
+                  <span id="ghzValue" class="text-cyberCyan font-bold text-base">3.6 GHz</span>
+                </div>
+                <input id="ghzSlider" type="range" min="1" max="50" value="36" class="w-full" oninput="updateGhz(this.value)">
+                <div class="flex justify-between text-[11px] font-code text-gray-400">
+                  <span>1.0 GHz (1 млрд оп/сек)</span>
+                  <span class="text-cyberPink">5.0 GHz (ТУРБО)</span>
+                </div>
+                <div id="cpuOpsLog" class="text-xs font-code text-cyberGreen h-6 overflow-hidden">
+                  Выполняется: 3 600 000 000 вычислений в секунду...
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-1 flex flex-col items-center">
+              <div class="relative w-56 h-56 bg-gradient-to-br from-amber-700/30 to-amber-950/60 border-2 border-cyberAmber rounded-xl p-4 flex flex-col items-center justify-center shadow-[0_0_30px_rgba(255,170,0,0.3)] animate-pulse-glow">
+                <i class="fa-solid fa-microchip text-6xl text-cyberAmber mb-2"></i>
+                <span class="font-hud font-black text-white text-lg">TITAN-CORE</span>
+                <span class="font-code text-xs text-cyberAmber tracking-widest">SILICON 7nm</span>
+                <div class="absolute inset-0 border border-cyberAmber/30 m-2 rounded pointer-events-none"></div>
+              </div>
+            </div>
+          </div>
+        `,
+        teacher: `
+          <div class="space-y-3">
+            <h4 class="font-hud text-cyberPurple font-bold">🎯 ЦЕЛЬ:</h4>
+            <p>Понять, что герцы (GHz) — это скорость размышления процессора. 1 ГГц = 1 миллиард действий в 1 секунду!</p>
+            <h4 class="font-hud text-cyberGreen font-bold">🛠 ДЕЙСТВИЕ РУКАМИ:</h4>
+            <p>Возьмите снятый процессор (или аккуратно откройте сокет):<br>
+            «Потрогай его крышку. Чувствуешь, какой он тяжелый и холодный? А снизу тысячи золотых ножек/контактов!»</p>
+          </div>
+        `
+      },
+
+      // SLIDE 4 - COOLER
+      {
+        id: 4,
+        title: "МИССИЯ 03: ОХЛАЖДЕНИЕ",
+        invKey: "cooler",
+        render: () => `
+          <div class="cyber-border w-full p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center max-w-5xl">
+            <div class="flex-1 space-y-4">
+              <div class="inline-block px-3 py-1 bg-cyberCyan/10 border border-cyberCyan/40 text-cyberCyan text-xs font-code tracking-widest">УЗЕЛ 03 // ТЕПЛОВОЙ ЩИТ</div>
+              <h2 class="font-hud text-2xl md:text-3xl font-black text-white">ОГНЕННЫЙ ПЕРЕГРЕВ</h2>
+              <p class="text-sm md:text-base text-gray-300">Мозг разогревается до 100°C за несколько секунд! Если его не охладить — процессор отключится для спасения от расплавления. Радиатор забирает тепло, а вентилятор сдувает его вон.</p>
+
+              <!-- Interactive RPM & Temp Control -->
+              <div class="p-4 bg-cyberNavy/90 border border-cyberCyan/30 rounded-lg space-y-3">
+                <div class="flex justify-between items-center text-xs font-hud">
+                  <span class="text-gray-300">СКОРОСТЬ ВЕРТУШКИ:</span>
+                  <span id="rpmValue" class="text-cyberCyan font-bold text-sm">1200 RPM</span>
+                </div>
+                <input id="coolerSlider" type="range" min="0" max="3000" value="1200" class="w-full" oninput="updateCooler(this.value)">
+                
+                <div class="flex items-center justify-between pt-2">
+                  <span class="text-xs font-hud text-gray-300">ТЕМПЕРАТУРА ЯДРА:</span>
+                  <span id="tempValue" class="font-hud font-black text-lg text-cyberGreen">42°C (НОРМА)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-1 flex flex-col items-center">
+              <div class="relative w-52 h-52 flex items-center justify-center">
+                <div id="fanBlades" class="w-48 h-48 border-4 border-dashed border-cyberCyan rounded-full flex items-center justify-center transition-all" style="animation: spin 1s linear infinite;">
+                  <i class="fa-solid fa-fan text-7xl text-cyberCyan"></i>
+                </div>
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <span class="w-12 h-12 rounded-full bg-cyberNavy border border-cyberCyan"></span>
+                </div>
+              </div>
+              <span class="text-xs font-code text-gray-400 mt-4">Метафора: Термопаста выгоняет воздух-изолятор!</span>
+            </div>
+          </div>
+        `,
+        teacher: `
+          <div class="space-y-3">
+            <h4 class="font-hud text-cyberPurple font-bold">🎯 ЦЕЛЬ:</h4>
+            <p>Объяснить трио: Радиатор (металл) + Термопаста (мостик) + Вентилятор (поток воздуха).</p>
+            <h4 class="font-hud text-cyberGreen font-bold">🛠 ДЕЙСТВИЕ РУКАМИ:</h4>
+            <p>Дайте покрутить лопасти кулера пальцем. Покажите радиатор — спросите: «Зачем у него столько тонких металлических пластинок?» (Чтобы площадь соприкосновения с воздухом была огромной).</p>
+          </div>
+        `
+      },
+
+      // SLIDE 5 - RAM
+      {
+        id: 5,
+        title: "МИССИЯ 04: ОПЕРАТИВНАЯ ПАМЯТЬ",
+        invKey: "ram",
+        render: () => `
+          <div class="cyber-border w-full p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center max-w-5xl">
+            <div class="flex-1 space-y-4">
+              <div class="inline-block px-3 py-1 bg-cyberGreen/10 border border-cyberGreen/40 text-cyberGreen text-xs font-code tracking-widest">УЗЕЛ 04 // ОПЕРАТИВКА (RAM)</div>
+              <h2 class="font-hud text-2xl md:text-3xl font-black text-white">СВЕРХБЫСТРЫЙ ВЕРСТАК</h2>
+              <p class="text-sm md:text-base text-gray-300">Оперативная память — это рабочий стол процессора. Сюда попадают игра, вкладки браузера и музыка, пока компьютер включен. Но выключи свет — и всё со стола исчезнет без следа!</p>
+              
+              <div class="flex gap-3">
+                <button onclick="testRam(true)" class="cyber-btn px-4 py-2 bg-cyberGreen/20 border border-cyberGreen text-cyberGreen font-hud text-xs hover:bg-cyberGreen hover:text-black">
+                  <i class="fa-solid fa-bolt mr-1"></i> ОТКРЫТЬ ИГРУ В RAM
+                </button>
+                <button onclick="testRam(false)" class="cyber-btn px-4 py-2 bg-red-500/20 border border-red-500 text-red-400 font-hud text-xs hover:bg-red-500 hover:text-white">
+                  <i class="fa-solid fa-power-off mr-1"></i> ОБЕСТОЧИТЬ
+                </button>
+              </div>
+
+              <div id="ramStatusBox" class="p-3 bg-cyberNavy border border-gray-700 rounded text-xs font-code text-gray-300">
+                Занято памяти: 0 Мб / 16384 Мб
+              </div>
+            </div>
+
+            <div class="flex-1 flex flex-col items-center">
+              <div class="w-64 h-24 bg-emerald-950/80 border-2 border-cyberGreen rounded p-3 flex flex-col justify-between shadow-[0_0_20px_rgba(0,255,136,0.2)]">
+                <div class="flex justify-between items-center text-[10px] font-hud text-cyberGreen">
+                  <span>DDR5 ULTRA 16GB</span>
+                  <i class="fa-solid fa-lock text-xs"></i>
+                </div>
+                <div class="flex justify-around items-center">
+                  <span class="w-8 h-8 bg-black/60 border border-cyberGreen/40 rounded"></span>
+                  <span class="w-8 h-8 bg-black/60 border border-cyberGreen/40 rounded"></span>
+                  <span class="w-8 h-8 bg-black/60 border border-cyberGreen/40 rounded"></span>
+                  <span class="w-8 h-8 bg-black/60 border border-cyberGreen/40 rounded"></span>
+                </div>
+                <div class="flex justify-between border-t border-cyberGreen/30 pt-1 text-[8px] text-yellow-400 font-code">
+                  <span>||||||||||||||</span>
+                  <span class="text-cyberPink font-bold">КЛЮЧ</span>
+                  <span>||||||||||||||</span>
+                </div>
+              </div>
+              <span class="text-xs font-code text-gray-400 mt-4 text-center">Фирменный кайф сборщика: услышать «ЩЁЛК» замка!</span>
+            </div>
+          </div>
+        `,
+        teacher: `
+          <div class="space-y-3">
+            <h4 class="font-hud text-cyberPurple font-bold">🎯 ЦЕЛЬ:</h4>
+            <p>Усвоить разницу: RAM быстрая, но энергозависимая (стирается). Ключ в разъеме — защита от неправильной установки.</p>
+            <h4 class="font-hud text-cyberGreen font-bold">🛠 ДЕЙСТВИЕ РУКАМИ:</h4>
+            <p>Дайте плашку RAM в руки ученику. Покажите слот DIMM на плате: «Обрати внимание на выемку-ключ. Нажми плашку с двух сторон до характерного щелчка замков!»</p>
+          </div>
+        `
+      },
+
+      // SLIDE 6 - STORAGE (SSD vs HDD)
+      {
+        id: 6,
+        title: "МИССИЯ 05: НАКОПИТЕЛЬ (SSD/HDD)",
+        invKey: "ssd",
+        render: () => `
+          <div class="cyber-border w-full p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center max-w-5xl">
+            <div class="flex-1 space-y-4">
+              <div class="inline-block px-3 py-1 bg-cyberCyan/10 border border-cyberCyan/40 text-cyberCyan text-xs font-code tracking-widest">УЗЕЛ 05 // ВЕЧНЫЙ АРХИВ</div>
+              <h2 class="font-hud text-2xl md:text-3xl font-black text-white">ДУЭЛЬ: HDD vs SSD</h2>
+              <p class="text-sm md:text-base text-gray-300">Если выключить компьютер — фото, Windows и сохраненные миры останутся тут навсегда. Старый HDD крутил железные диски иглой, а новый SSD — это чистая вспышка молнии!</p>
+
+              <button onclick="startStorageRace()" class="cyber-btn px-6 py-2.5 bg-cyberCyan text-cyberDark font-hud font-bold text-xs tracking-wider">
+                <i class="fa-solid fa-flag-checkered mr-2"></i> ЗАПУСТИТЬ ЗАГРУЗКУ ИГРЫ
+              </button>
+            </div>
+
+            <div class="flex-1 w-full space-y-4">
+              <!-- Race tracks -->
+              <div class="p-3 bg-cyberNavy/90 border border-gray-700 rounded space-y-1">
+                <div class="flex justify-between text-xs font-hud text-gray-400">
+                  <span>СТАРЫЙ HDD (ДИСК С ИГЛОЙ)</span>
+                  <span id="hddPercent">0%</span>
+                </div>
+                <div class="w-full bg-gray-800 h-3 rounded overflow-hidden">
+                  <div id="hddBar" class="h-full bg-amber-500 transition-all duration-3000 w-0"></div>
+                </div>
+              </div>
+
+              <div class="p-3 bg-cyberNavy/90 border border-cyberCyan/30 rounded space-y-1">
+                <div class="flex justify-between text-xs font-hud text-cyberCyan">
+                  <span>СОВРЕМЕННЫЙ NVMe SSD (ЧИПЫ)</span>
+                  <span id="ssdPercent">0%</span>
+                </div>
+                <div class="w-full bg-gray-800 h-3 rounded overflow-hidden">
+                  <div id="ssdBar" class="h-full bg-cyberCyan transition-all duration-500 w-0"></div>
+                </div>
+              </div>
+
+              <div id="storageRaceResult" class="text-xs font-code text-cyberGreen h-5 text-center">
+                Нажми кнопку дуэли!
+              </div>
+            </div>
+          </div>
+        `,
+        teacher: `
+          <div class="space-y-3">
+            <h4 class="font-hud text-cyberPurple font-bold">🎯 ЦЕЛЬ:</h4>
+            <p>Показать прогресс технологий: от механических тяжелых дисков к микрочипам памяти M.2 размером с палец.</p>
+            <h4 class="font-hud text-cyberGreen font-bold">🛠 ДЕЙСТВИЕ РУКАМИ:</h4>
+            <p>Дайте подержать тяжелый 3.5" HDD и легкий SSD. Если есть вскрытый HDD — покажите зеркальный блин и считывающую головку: «Смотри, он похож на проигрыватель пластинок!»</p>
+          </div>
+        `
+      },
+
+      // SLIDE 7 - GPU
+      {
+        id: 7,
+        title: "МИССИЯ 06: ВИДЕОКАРТА (GPU)",
+        invKey: "gpu",
+        render: () => `
+          <div class="cyber-border w-full p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center max-w-5xl">
+            <div class="flex-1 space-y-4">
+              <div class="inline-block px-3 py-1 bg-cyberPink/10 border border-cyberPink/40 text-cyberPink text-xs font-code tracking-widest">УЗЕЛ 06 // ВИЗУАЛЬНЫЙ ДВИЖОК</div>
+              <h2 class="font-hud text-2xl md:text-3xl font-black text-white">ГЕНЕРАТОР МИРОВ</h2>
+              <p class="text-sm md:text-base text-gray-300">Если CPU — один гениальный профессор, то видеокарта (GPU) — армия из 5000 художников! Каждый рисует свой пиксель в Minecraft или Cyberpunk 60 раз за секунду.</p>
+
+              <!-- Shader Mode Switcher -->
+              <div class="space-y-2">
+                <span class="text-xs font-hud text-gray-400">РЕЖИМ ГРАФИКИ:</span>
+                <div class="flex gap-2">
+                  <button onclick="setShader('wireframe')" class="cyber-btn px-3 py-1.5 bg-gray-800 border border-gray-600 text-xs font-code hover:text-cyberCyan">1. Сетка</button>
+                  <button onclick="setShader('lowpoly')" class="cyber-btn px-3 py-1.5 bg-gray-800 border border-gray-600 text-xs font-code hover:text-cyberCyan">2. Low-Poly</button>
+                  <button onclick="setShader('rtx')" class="cyber-btn px-3 py-1.5 bg-cyberPink/20 border border-cyberPink text-cyberPink text-xs font-code hover:bg-cyberPink hover:text-white">3. RTX ULTRA</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-1 flex flex-col items-center">
+              <div id="gpuDisplayBox" class="w-64 h-48 bg-black border-2 border-cyberPink/50 rounded-lg flex flex-col items-center justify-center relative overflow-hidden shadow-[0_0_25px_rgba(255,0,127,0.3)]">
+                <i id="gpuAvatarIcon" class="fa-solid fa-cube text-7xl text-cyberCyan transition-all duration-300"></i>
+                <span id="gpuStatusTag" class="absolute bottom-2 font-code text-[11px] text-cyberPink">РЕЖИМ: RTX ULTRA</span>
+              </div>
+              <span class="text-xs font-code text-gray-400 mt-3">Вставляется в массивный слот PCI-Express!</span>
+            </div>
+          </div>
+        `,
+        teacher: `
+          <div class="space-y-3">
+            <h4 class="font-hud text-cyberPurple font-bold">🎯 ЦЕЛЬ:</h4>
+            <p>Объяснить, почему видеокарта такая массивная (у нее свой процессор, своя видеопамять VRAM и свои 2-3 вентилятора).</p>
+            <h4 class="font-hud text-cyberGreen font-bold">🛠 ДЕЙСТВИЕ РУКАМИ:</h4>
+            <p>Укажите на самый длинный разъем PCI-E. Дайте ученику вставить карту и аккуратно закрутить крепежный винт в корпус.</p>
+          </div>
+        `
+      },
+
+      // SLIDE 8 - PSU
+      {
+        id: 8,
+        title: "МИССИЯ 07: БЛОК ПИТАНИЯ (PSU)",
+        invKey: "psu",
+        render: () => `
+          <div class="cyber-border w-full p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center max-w-5xl">
+            <div class="flex-1 space-y-4">
+              <div class="inline-block px-3 py-1 bg-cyberAmber/10 border border-cyberAmber/40 text-cyberAmber text-xs font-code tracking-widest">УЗЕЛ 07 // СЕРДЦЕ И РЕАКТОР</div>
+              <h2 class="font-hud text-2xl md:text-3xl font-black text-white">ТРАНСФОРМАТОР ЭНЕРГИИ</h2>
+              <p class="text-sm md:text-base text-gray-300">Из розетки идет бурный ток 220 Вольт — он может испепелить тончайшие чипы за миллисекунду! Блок питания усмиряет энергию до мягких 12В и 5В и качает ток по кабелям.</p>
+
+              <button id="ignitePsuBtn" onclick="igniteReactor()" class="cyber-btn px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-black font-hud font-black text-xs tracking-widest shadow-[0_0_20px_rgba(255,170,0,0.5)]">
+                <i class="fa-solid fa-atom mr-2"></i> ЗАЖЕЧЬ РЕАКТОР ПИТАНИЯ
+              </button>
+            </div>
+
+            <div class="flex-1 flex flex-col items-center">
+              <div class="relative w-52 h-52 bg-slate-900 border-2 border-cyberAmber/50 rounded-xl p-4 flex flex-col items-center justify-center">
+                <i id="reactorIcon" class="fa-solid fa-bolt-lightning text-6xl text-cyberAmber transition-all duration-300"></i>
+                <div id="reactorStatus" class="font-hud text-xs text-cyberAmber mt-3">ТОК: 0 W</div>
+                <div class="mt-2 text-[10px] font-code text-gray-400">Главный шлейф: 24-PIN ATX</div>
+              </div>
+            </div>
+          </div>
+        `,
+        teacher: `
+          <div class="space-y-3">
+            <h4 class="font-hud text-cyberPurple font-bold">🎯 ЦЕЛЬ:</h4>
+            <p>Понять безопасность и трансформацию: 220V -> 12V/5V. Разобрать кабели: толстый 24-pin для платы и 8-pin для процессора/видеокарты.</p>
+            <h4 class="font-hud text-cyberGreen font-bold">🛠 ДЕЙСТВИЕ РУКАМИ:</h4>
+            <p>Дайте в руки колодку 24-pin: «Попробуй подключить ее в сокет материнки. На ней тоже есть защелка!»</p>
+          </div>
+        `
+      },
+
+      // SLIDE 9 - MINI GAME: PORTS & CABLES
+      {
+        id: 9,
+        title: "МИССИЯ 08: ПРОВОДА И ПОРТЫ",
+        invKey: null,
+        render: () => `
+          <div class="cyber-border w-full p-6 md:p-8 flex flex-col items-center max-w-4xl text-center space-y-6">
+            <div>
+              <div class="inline-block px-3 py-1 bg-cyberCyan/10 border border-cyberCyan/40 text-cyberCyan text-xs font-code tracking-widest mb-2">МИНИ-ИГРА // СООБРАЗИТЕЛЬНОСТЬ</div>
+              <h2 class="font-hud text-2xl md:text-3xl font-black text-white">КУДА ВСТАВЛЯЕМ КАБЕЛЬ?</h2>
+              <p class="text-sm text-gray-300 max-w-xl mx-auto">Нажми на правильный провод для задачи: <b>«Подключить монитор с высокой частотой 144Hz и звуком»</b></p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
+              <button onclick="guessCable('usb')" class="p-4 bg-cyberNavy/90 border border-gray-700 hover:border-cyberCyan rounded-lg text-center space-y-2 group">
+                <i class="fa-brands fa-usb text-3xl text-gray-400 group-hover:text-cyberCyan"></i>
+                <div class="font-hud text-xs text-white">USB Type-A</div>
+                <p class="text-[11px] text-gray-400">Для мышки и клавиатуры</p>
+              </button>
+
+              <button onclick="guessCable('hdmi')" class="p-4 bg-cyberNavy/90 border border-cyberCyan hover:border-cyberGreen rounded-lg text-center space-y-2 group">
+                <i class="fa-solid fa-tv text-3xl text-cyberCyan group-hover:text-cyberGreen"></i>
+                <div class="font-hud text-xs text-cyberCyan group-hover:text-cyberGreen">HDMI / DisplayPort</div>
+                <p class="text-[11px] text-gray-400">Видеосигнал на экран</p>
+              </button>
+
+              <button onclick="guessCable('jack')" class="p-4 bg-cyberNavy/90 border border-gray-700 hover:border-cyberCyan rounded-lg text-center space-y-2 group">
+                <i class="fa-solid fa-headphones text-3xl text-gray-400 group-hover:text-cyberCyan"></i>
+                <div class="font-hud text-xs text-white">AUX 3.5mm</div>
+                <p class="text-[11px] text-gray-400">Только звук на наушники</p>
+              </button>
+            </div>
+
+            <div id="cableQuizResult" class="font-code text-sm text-cyberCyan h-6">Сделай свой выбор!</div>
+          </div>
+        `,
+        teacher: `
+          <div class="space-y-3">
+            <h4 class="font-hud text-cyberPurple font-bold">🎯 ЦЕЛЬ:</h4>
+            <p>Закрепить внешние порты задней панели (I/O Shield): куда втыкать монитор (в видеокарту, а не в плату, если есть GPU!).</p>
+            <h4 class="font-hud text-cyberGreen font-bold">🛠 ДЕЙСТВИЕ РУКАМИ:</h4>
+            <p>Поверните системный блок задом к ученику. Покажите кабель HDMI: пусть он сам воткнет его в нужный видеовыход.</p>
+          </div>
+        `
+      },
+
+      // SLIDE 10 - ASSEMBLY CHECKLIST
+      {
+        id: 10,
+        title: "МИССИЯ 09: ЧЕК-ЛИСТ СБОРКИ В РЕАЛЬНОСТИ",
+        invKey: null,
+        render: () => `
+          <div class="cyber-border w-full p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center max-w-5xl">
+            <div class="flex-1 space-y-4">
+              <div class="inline-block px-3 py-1 bg-cyberGreen/10 border border-cyberGreen/40 text-cyberGreen text-xs font-code tracking-widest">ФИЗИЧЕСКИЙ КВЕСТ // ПРОВЕРКА</div>
+              <h2 class="font-hud text-2xl md:text-3xl font-black text-white">КОНТРОЛЬНЫЙ ОСМОТР</h2>
+              <p class="text-sm text-gray-300">Перед включением питания инженер обязан перепроверить все узлы. Отмечай каждый шаг, когда проверишь его в нашем настоящем корпусе на столе!</p>
+
+              <!-- Stopwatch Timer -->
+              <div class="flex items-center gap-4 p-3 bg-cyberNavy border border-cyberCyan/30 rounded">
+                <span class="font-hud text-xs text-cyberCyan">ТАЙМЕР ТАКТОВКИ:</span>
+                <span id="questTimer" class="font-code font-bold text-xl text-cyberGreen">05:00</span>
+                <button onclick="startAssemblyTimer()" class="cyber-btn px-3 py-1 bg-cyberCyan/20 text-cyberCyan text-xs font-hud border border-cyberCyan">СТАРТ</button>
+              </div>
+            </div>
+
+            <div class="flex-1 w-full space-y-2.5 font-code text-xs">
+              <label class="flex items-center gap-3 p-2.5 bg-cyberNavy/90 border border-gray-700 rounded cursor-pointer hover:border-cyberCyan">
+                <input type="checkbox" onchange="checkTask(this)" class="w-4 h-4 accent-cyberCyan">
+                <span>1. Процессор закреплен прижимной рамкой</span>
+              </label>
+              <label class="flex items-center gap-3 p-2.5 bg-cyberNavy/90 border border-gray-700 rounded cursor-pointer hover:border-cyberCyan">
+                <input type="checkbox" onchange="checkTask(this)" class="w-4 h-4 accent-cyberCyan">
+                <span>2. Кулер подключен к разъему CPU_FAN</span>
+              </label>
+              <label class="flex items-center gap-3 p-2.5 bg-cyberNavy/90 border border-gray-700 rounded cursor-pointer hover:border-cyberCyan">
+                <input type="checkbox" onchange="checkTask(this)" class="w-4 h-4 accent-cyberCyan">
+                <span>3. Планки RAM защелкнуты с двух сторон</span>
+              </label>
+              <label class="flex items-center gap-3 p-2.5 bg-cyberNavy/90 border border-gray-700 rounded cursor-pointer hover:border-cyberCyan">
+                <input type="checkbox" onchange="checkTask(this)" class="w-4 h-4 accent-cyberCyan">
+                <span>4. Видеокарта зафиксирована в PCI-E</span>
+              </label>
+              <label class="flex items-center gap-3 p-2.5 bg-cyberNavy/90 border border-gray-700 rounded cursor-pointer hover:border-cyberCyan">
+                <input type="checkbox" onchange="checkTask(this)" class="w-4 h-4 accent-cyberCyan">
+                <span>5. Питание 24-PIN и кабель SSD на месте</span>
+              </label>
+            </div>
+          </div>
+        `,
+        teacher: `
+          <div class="space-y-3">
+            <h4 class="font-hud text-cyberPurple font-bold">🎯 ЦЕЛЬ:</h4>
+            <p>Закрепить аккуратность и инженерную дисциплину. Проверить сборку настоящего компа на столе.</p>
+            <h4 class="font-hud text-cyberGreen font-bold">🛠 ДЕЙСТВИЕ РУКАМИ:</h4>
+            <p>Ученик сам тыкает пальцем в каждый узел в корпусе и ставит галочку на экране. Если всё собрано — закрываем боковую крышку!</p>
+          </div>
+        `
+      },
+
+      // SLIDE 11 - FIRST BOOT (BIOS / POST)
+      {
+        id: 11,
+        title: "МИССИЯ 10: ПЕРВЫЙ ЗАПУСК (POST)",
+        invKey: null,
+        render: () => `
+          <div class="cyber-border w-full p-6 md:p-8 flex flex-col items-center max-w-4xl text-center space-y-6">
+            <div>
+              <div class="inline-block px-3 py-1 bg-cyberCyan/10 border border-cyberCyan/40 text-cyberCyan text-xs font-code tracking-widest mb-2">МОМЕНТ ИСТИНЫ // BIOS POST</div>
+              <h2 class="font-hud text-2xl md:text-3xl font-black text-white">ПУСК ТИТАНА</h2>
+              <p class="text-sm text-gray-300 max-w-lg mx-auto">Все органы собраны. Пора подать импульс в главную магистраль. Нажми кнопку пуска питания!</p>
+            </div>
+
+            <!-- Big Power Button -->
+            <button id="mainPowerButton" onclick="triggerTitanBoot()" class="w-36 h-36 rounded-full bg-gradient-to-br from-cyberCyan/30 to-blue-900/60 border-4 border-cyberCyan flex flex-col items-center justify-center text-cyberCyan hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(0,243,255,0.4)] transition-all">
+              <i class="fa-solid fa-power-off text-5xl mb-1"></i>
+              <span class="font-hud font-bold text-xs">POWER ON</span>
+            </button>
+
+            <!-- Terminal output -->
+            <div id="biosBootLog" class="w-full max-w-xl h-28 bg-black/90 border border-cyberCyan/30 rounded p-3 text-left font-code text-xs text-cyberGreen overflow-y-auto">
+              <div>[SYSTEM]: Ожидание нажатия кнопки запуска...</div>
+            </div>
+          </div>
+        `,
+        teacher: `
+          <div class="space-y-3">
+            <h4 class="font-hud text-cyberPurple font-bold">🎯 ЦЕЛЬ:</h4>
+            <p>Дать мощный эмоциональный финал железной части урока. Ученик нажимает реальную кнопку питания на ПК и на экране!</p>
+            <h4 class="font-hud text-cyberGreen font-bold">🛠 ДЕЙСТВИЕ РУКАМИ:</h4>
+            <p>Подключите сетевой провод в розетку (или включите тумблер на БП). Торжественно скомандуйте ученику нажать кнопку POWER на передней панели корпуса.</p>
+          </div>
+        `
+      },
+
+      // SLIDE 12 - HARDWARE VS SOFTWARE
+      {
+        id: 12,
+        title: "МИССИЯ 11: ЖЕЛЕЗО vs СОФТ",
+        invKey: null,
+        render: () => `
+          <div class="cyber-border w-full p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center max-w-5xl">
+            <div class="flex-1 space-y-4">
+              <div class="inline-block px-3 py-1 bg-cyberPurple/10 border border-cyberPurple/40 text-cyberPurple text-xs font-code tracking-widest">ФИЛОСОФИЯ IT // МОСТ К КОДУ</div>
+              <h2 class="font-hud text-2xl md:text-3xl font-black text-white">ТЕЛО БЕЗ ДУШИ</h2>
+              <p class="text-sm md:text-base text-gray-300">Железо включилось, кулеры гудят, ток бежит по дорожкам. Но на экране пока пустота! Без программ (Software) самый дорогой компьютер — просто теплый обогреватель с лампочками.</p>
+              
+              <blockquote class="p-3 border-l-4 border-cyberCyan bg-cyberNavy font-code text-xs text-cyberCyan">
+                «Железо — это мускулы и мозг. Но программа — это мысли и воля!»
+              </blockquote>
+            </div>
+
+            <div class="flex-1 grid grid-cols-2 gap-4 w-full">
+              <div class="p-4 bg-slate-900 border border-gray-700 rounded text-center space-y-2">
+                <i class="fa-solid fa-server text-4xl text-gray-400"></i>
+                <div class="font-hud text-xs text-white">HARDWARE (ЖЕЛЕЗО)</div>
+                <p class="text-[11px] text-gray-400">Плата, чипы, кремний, провода</p>
+              </div>
+
+              <div class="p-4 bg-purple-950/40 border border-cyberPurple rounded text-center space-y-2">
+                <i class="fa-solid fa-code text-4xl text-cyberPurple"></i>
+                <div class="font-hud text-xs text-cyberPurple">SOFTWARE (СОФТ)</div>
+                <p class="text-[11px] text-gray-300">Игры, Windows, код на Python</p>
+              </div>
+            </div>
+          </div>
+        `,
+        teacher: `
+          <div class="space-y-3">
+            <h4 class="font-hud text-cyberPurple font-bold">🎯 ЦЕЛЬ:</h4>
+            <p>Построить бесшовный логический переход от отверток и плат к языку программирования Python.</p>
+            <h4 class="font-hud text-cyberGreen font-bold">🗣 ЧТО СКАЗАТЬ:</h4>
+            <p class="italic text-gray-300">«Ты собрал робота. Но как заставить его выполнить твою команду? Как сказать ему побеждать в играх? Нам нужен общий язык!»</p>
+          </div>
+        `
+      },
+
+      // SLIDE 13 - BRIDGE TO PYTHON
+      {
+        id: 13,
+        title: "МИССИЯ 12: МОСТ В PYTHON",
+        invKey: null,
+        render: () => `
+          <div class="cyber-border w-full p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center max-w-5xl">
+            <div class="flex-1 space-y-4">
+              <div class="inline-block px-3 py-1 bg-cyberGreen/10 border border-cyberGreen/40 text-cyberGreen text-xs font-code tracking-widest">ЯЗЫК КОМАНДИРОВ // PYTHON</div>
+              <h2 class="font-hud text-2xl md:text-3xl font-black text-white">ПОЧЕМУ ИМЕННО PYTHON?</h2>
+              <p class="text-sm md:text-base text-gray-300">Компьютер понимает только нули и единицы (01001000). Писать так человеку невозможно. Поэтому придумали Python — он звучит почти как обычный английский язык!</p>
+              
+              <div class="space-y-2 font-code text-xs">
+                <div class="p-2.5 bg-cyberNavy rounded border border-gray-700 text-gray-400">
+                  <span class="text-red-400">Машинный код:</span> 10110000 01100001
+                </div>
+                <div class="p-2.5 bg-cyberNavy rounded border border-cyberGreen/50 text-cyberGreen">
+                  <span class="text-cyberCyan">Код на Python:</span> print("Привет, Мир!")
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-1 flex flex-col items-center">
+              <div class="w-56 h-56 rounded-full bg-gradient-to-tr from-yellow-500/20 via-blue-600/30 to-cyberGreen/20 border-2 border-cyberGreen flex flex-col items-center justify-center p-4 shadow-[0_0_30px_rgba(0,255,136,0.3)]">
+                <i class="fa-brands fa-python text-7xl text-yellow-400 mb-2"></i>
+                <span class="font-hud font-bold text-white text-base">PYTHON 3</span>
+                <span class="font-code text-[11px] text-cyberCyan">Твой главный пульт</span>
+              </div>
+            </div>
+          </div>
+        `,
+        teacher: `
+          <div class="space-y-3">
+            <h4 class="font-hud text-cyberPurple font-bold">🎯 ЦЕЛЬ:</h4>
+            <p>Снять страх перед программированием. Показать, что Python — это просто слова (print, input, if).</p>
+            <h4 class="font-hud text-cyberGreen font-bold">🗣 ЧТО СКАЗАТЬ:</h4>
+            <p class="italic text-gray-300">«На следующем слайде мы прямо сейчас напишем первые команды процессору и увидим, как он отреагирует!»</p>
+          </div>
+        `
+      },
+
+      // SLIDE 14 - LIVE INTERACTIVE TERMINAL
+      {
+        id: 14,
+        title: "МИССИЯ 13: ТЕРМИНАЛ PYTHON",
+        invKey: null,
+        render: () => `
+          <div class="cyber-border w-full p-6 md:p-8 flex flex-col md:flex-row gap-6 items-center max-w-5xl">
+            <div class="flex-1 space-y-4">
+              <div class="inline-block px-3 py-1 bg-cyberCyan/10 border border-cyberCyan/40 text-cyberCyan text-xs font-code tracking-widest">ИНТЕРАКТИВНЫЙ ТЕРМИНАЛ // PYTHON LIVE</div>
+              <h2 class="font-hud text-2xl font-black text-white">ПРИКАЖИ ТИТАНУ!</h2>
+              <p class="text-xs md:text-sm text-gray-300">Нажимай кнопки с командами на Python или выбери действие, чтобы процессор выполнил скрипт в реальном времени:</p>
+
+              <!-- Command Presets -->
+              <div class="grid grid-cols-2 gap-2">
+                <button onclick="runPyCmd('hello')" class="cyber-btn p-2 bg-cyberNavy border border-cyberCyan text-cyberCyan text-xs font-code hover:bg-cyberCyan hover:text-black text-left">
+                  ▶ print("Привет, Титан!")
+                </button>
+                <button onclick="runPyCmd('color')" class="cyber-btn p-2 bg-cyberNavy border border-cyberPink text-cyberPink text-xs font-code hover:bg-cyberPink hover:text-white text-left">
+                  ▶ titan.set_color("PINK")
+                </button>
+                <button onclick="runPyCmd('scan')" class="cyber-btn p-2 bg-cyberNavy border border-cyberGreen text-cyberGreen text-xs font-code hover:bg-cyberGreen hover:text-black text-left">
+                  ▶ titan.scan_viruses()
+                </button>
+                <button onclick="runPyCmd('turbo')" class="cyber-btn p-2 bg-cyberNavy border border-cyberAmber text-cyberAmber text-xs font-code hover:bg-cyberAmber hover:text-black text-left">
+                  ▶ titan.turbo_mode()
+                </button>
+              </div>
+            </div>
+
+            <!-- Terminal Output Window -->
+            <div class="flex-1 w-full bg-black/95 border-2 border-cyberCyan/50 rounded-lg p-4 font-code text-xs flex flex-col justify-between h-64 shadow-[0_0_20px_rgba(0,243,255,0.2)]">
+              <div class="flex items-center justify-between border-b border-gray-800 pb-2 text-gray-500 text-[10px]">
+                <span>PYTHON 3.12.0 INTERACTIVE CONSOLE</span>
+                <span class="flex gap-1"><span class="w-2 h-2 rounded-full bg-red-500"></span><span class="w-2 h-2 rounded-full bg-yellow-500"></span><span class="w-2 h-2 rounded-full bg-green-500"></span></span>
+              </div>
+
+              <div id="pyConsoleLines" class="flex-1 py-2 overflow-y-auto space-y-1 text-cyberGreen">
+                <div>>>> # Добро пожаловать в командный центр!</div>
+                <div>>>> # Нажми команду слева...</div>
+              </div>
+
+              <div class="flex items-center gap-2 border-t border-gray-800 pt-2 text-cyberCyan">
+                <span>>>></span>
+                <span class="animate-pulse">_</span>
+              </div>
+            </div>
+          </div>
+        `,
+        teacher: `
+          <div class="space-y-3">
+            <h4 class="font-hud text-cyberPurple font-bold">🎯 ЦЕЛЬ:</h4>
+            <p>Ученик видит немедленный результат: команда на Python меняет цвет и выдает ответ на экране за миллисекунду.</p>
+            <h4 class="font-hud text-cyberGreen font-bold">🛠 ДЕЙСТВИЕ:</h4>
+            <p>Дайте ребенку понажимать кнопки команд. Покажите, как память выделяет переменную, а процессор выводит строчку текста.</p>
+          </div>
+        `
+      },
+
+      // SLIDE 15 - VICTORY / BADGE
+      {
+        id: 15,
+        title: "МИССИЯ 14: ТВОЯ СУПЕРСИЛА",
+        invKey: null,
+        render: () => `
+          <div class="cyber-border w-full p-8 md:p-12 text-center flex flex-col items-center justify-center max-w-4xl">
+            <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-cyberCyan to-cyberGreen border-2 border-white flex items-center justify-center text-3xl text-cyberDark mb-4 shadow-[0_0_30px_#00ff88] animate-bounce">
+              <i class="fa-solid fa-award"></i>
+            </div>
+            
+            <h1 class="font-hud font-black text-3xl md:text-5xl text-white tracking-wider mb-2">
+              МИССИЯ ВЫПОЛНЕНА!
+            </h1>
+            <p class="font-hud text-cyberCyan text-sm tracking-widest mb-6">
+              ПРИСВОЕНО ЗВАНИЕ: КИБЕР-ИНЖЕНЕР 1-ГО УРОВНЯ
+            </p>
+
+            <div class="p-4 bg-cyberNavy/90 border border-cyberGreen/40 rounded-lg max-w-xl text-sm text-gray-300 mb-6 leading-relaxed">
+              Ты своими руками изучил анатомию компьютера: материнку, процессор, кулер, оперативку, видеокарту и блок питания. А главное — узнал, как подчинить эту мощь языком Python!
+            </div>
+
+            <div class="p-3 bg-cyberPurple/20 border border-cyberPurple/50 rounded text-xs font-hud text-cyberPurple tracking-wider">
+              <i class="fa-solid fa-gamepad mr-2"></i> НА СЛЕДУЮЩЕМ УРОКЕ: ПИШЕМ СВОЮ ПЕРВУЮ ИГРУ НА PYTHON!
+            </div>
+          </div>
+        `,
+        teacher: `
+          <div class="space-y-3">
+            <h4 class="font-hud text-cyberPurple font-bold">🎯 ЦЕЛЬ:</h4>
+            <p>Завершить первый урок на высокой ноте гордости за себя. Ребенок чувствует себя крутым хакером и инженером.</p>
+            <h4 class="font-hud text-cyberGreen font-bold">🛠 ДОМАШНЕЕ ЗАДАНИЕ/КЛИФФХЭНГЕР:</h4>
+            <p>Похвалить за сборку. Спросить: «Какая деталь тебе показалась самой крутой?» Анонсировать, что на следующем уроке мы запустим среду разработки и напишем игру с графикой!</p>
+          </div>
+        `
+      }
+    ];
+
+    // ==========================================
+    // 4. PRESENTATION STATE MACHINE
+    // ==========================================
+    let currentSlideIdx = 0;
+    const unlockedParts = new Set();
+
+    function updateInventoryHUD() {
+      slidesData.forEach(slide => {
+        if (slide.invKey) {
+          const el = document.getElementById(`inv-${slide.invKey}`);
+          if (el) {
+            if (unlockedParts.has(slide.invKey)) {
+              el.classList.remove('border-gray-700', 'bg-gray-900/50', 'text-gray-500');
+              el.classList.add('border-cyberGreen', 'bg-cyberGreen/20', 'text-cyberGreen', 'shadow-[0_0_10px_#00ff88]');
+            } else {
+              el.classList.remove('border-cyberGreen', 'bg-cyberGreen/20', 'text-cyberGreen', 'shadow-[0_0_10px_#00ff88]');
+              el.classList.add('border-gray-700', 'bg-gray-900/50', 'text-gray-500');
+            }
+          }
+        }
+      });
+    }
+
+    function renderSlide(idx) {
+      if (idx < 0) idx = 0;
+      if (idx >= slidesData.length) idx = slidesData.length - 1;
+      currentSlideIdx = idx;
+
+      const slide = slidesData[currentSlideIdx];
+
+      // Unlock component if relevant
+      if (slide.invKey) {
+        unlockedParts.add(slide.invKey);
+        updateInventoryHUD();
+      }
+
+      // Update HUD elements
+      document.getElementById('slideCounter').innerText = `${String(slide.id).padStart(2, '0')} / ${String(slidesData.length).padStart(2, '0')}`;
+      document.getElementById('slideTitleMin').innerText = slide.title;
+      
+      const percent = ((currentSlideIdx + 1) / slidesData.length) * 100;
+      document.getElementById('progressBar').style.width = `${percent}%`;
+
+      // Status text
+      const statusText = document.getElementById('systemStatusText');
+      if (slide.id === 1) {
+        statusText.innerText = 'CORE: OFFLINE';
+        statusText.className = 'text-red-400';
+      } else if (currentSlideIdx === slidesData.length - 1) {
+        statusText.innerText = 'CORE: FULLY OPERATIONAL';
+        statusText.className = 'text-cyberGreen';
+      } else {
+        statusText.innerText = `PROGRESS: ${Math.round(percent)}%`;
+        statusText.className = 'text-cyberCyan';
+      }
+
+      // Render Viewport
+      const viewport = document.getElementById('slideViewport');
+      viewport.innerHTML = slide.render();
+      if (viewport.firstElementChild) viewport.firstElementChild.classList.add('fx-in');
+      if (slide.onShow) setTimeout(slide.onShow, 0);
+
+      // Render Teacher Content
+      const teacherContainer = document.getElementById('teacherContent');
+      teacherContainer.innerHTML = slide.teacher;
+
+      // Disable/enable prev/next buttons
+      document.getElementById('prevBtn').disabled = currentSlideIdx === 0;
+      document.getElementById('nextBtn').innerText = currentSlideIdx === slidesData.length - 1 ? 'ФИНИШ 🏆' : 'ДАЛЕЕ ▶';
+
+      audio.playClick();
+    }
+
+    function nextSlide() {
+      if (currentSlideIdx < slidesData.length - 1) {
+        renderSlide(currentSlideIdx + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlideIdx > 0) {
+        renderSlide(currentSlideIdx - 1);
+      }
+    }
+
+    // ==========================================
+    // 5. SLIDE SPECIFIC INTERACTIVE HANDLERS
+    // ==========================================
+    window.inspectMobo = function(part) {
+      const box = document.getElementById('moboDetails');
+      audio.playClick();
+      if (part === 'cpu') {
+        box.innerHTML = '<span class="text-cyberAmber font-bold">СОКЕТ ПРОЦЕССОРА:</span> Сюда садится мозг! Закрывается специальным стальным рычагом.';
+      } else if (part === 'ram') {
+        box.innerHTML = '<span class="text-cyberGreen font-bold">СЛОТЫ DIMM:</span> Гнезда для сверхбыстрой оперативной памяти со щелкающими замками.';
+      } else if (part === 'pci') {
+        box.innerHTML = '<span class="text-cyberPink font-bold">СЛОТ PCI-EXPRESS:</span> Сверхмощный разъем для массивной видеокарты.';
+      }
+    };
+
+    window.updateGhz = function(val) {
+      const ghz = (val / 10).toFixed(1);
+      document.getElementById('ghzValue').innerText = `${ghz} GHz`;
+      const ops = Math.round(ghz * 1000000000).toLocaleString('ru-RU');
+      document.getElementById('cpuOpsLog').innerText = `Выполняется: ${ops} вычислений в секунду!`;
+      audio.playTyping();
+    };
+
+    window.updateCooler = function(rpm) {
+      document.getElementById('rpmValue').innerText = `${rpm} RPM`;
+      const fan = document.getElementById('fanBlades');
+      const temp = document.getElementById('tempValue');
+      
+      if (rpm == 0) {
+        fan.style.animation = 'none';
+        temp.innerHTML = '<span class="text-red-500 font-bold animate-pulse">105°C (ПЕРЕГРЕВ! ПЛИТА ГОРИТ)</span>';
+        audio.playBuzzer();
+      } else {
+        const speed = Math.max(0.05, 2 - (rpm / 1600));
+        fan.style.animation = `spin ${speed}s linear infinite`;
+        const tempC = Math.round(95 - (rpm / 3000) * 60);
+        if (tempC < 50) {
+          temp.innerHTML = `<span class="text-cyberGreen">${tempC}°C (ЛЕСТНЫЙ ХОЛОД)</span>`;
+        } else {
+          temp.innerHTML = `<span class="text-cyberAmber">${tempC}°C (ТЕПЛО)</span>`;
+        }
+      }
+    };
+
+    window.testRam = function(powerOn) {
+      const box = document.getElementById('ramStatusBox');
+      if (powerOn) {
+        audio.playPowerUp();
+        box.innerHTML = '<span class="text-cyberGreen font-bold">ИГРА ЗАГРУЖЕНА:</span> Текстуры и физика моментально перелетели в 8192 Мб RAM!';
+      } else {
+        audio.playBuzzer();
+        box.innerHTML = '<span class="text-red-400 font-bold">ПИТАНИЕ СНЯТО:</span> Пфф! Все 8192 Мб мгновенно испарились в ноль!';
+      }
+    };
+
+    window.startStorageRace = function() {
+      audio.playPowerUp();
+      const hddBar = document.getElementById('hddBar');
+      const ssdBar = document.getElementById('ssdBar');
+      const hddP = document.getElementById('hddPercent');
+      const ssdP = document.getElementById('ssdPercent');
+      const result = document.getElementById('storageRaceResult');
+
+      hddBar.style.width = '0%';
+      ssdBar.style.width = '0%';
+      hddP.innerText = '0%';
+      ssdP.innerText = '0%';
+      result.innerText = 'Гонка скоростей началась...';
+
+      // SSD reaches 100% in 0.5s
+      setTimeout(() => {
+        ssdBar.style.width = '100%';
+        ssdP.innerText = '100% (0.6 сек)';
+        audio.playClick();
+      }, 50);
+
+      // HDD crawls slowly
+      setTimeout(() => {
+        hddBar.style.width = '30%';
+        hddP.innerText = '30%';
+      }, 700);
+
+      setTimeout(() => {
+        hddBar.style.width = '70%';
+        hddP.innerText = '70%';
+      }, 1800);
+
+      setTimeout(() => {
+        hddBar.style.width = '100%';
+        hddP.innerText = '100% (3.2 сек)';
+        result.innerHTML = '<span class="text-cyberCyan font-bold">SSD В 6 РАЗ БЫСТРЕЕ МЕХАНИЧЕСКОГО HDD!</span>';
+      }, 3000);
+    };
+
+    window.setShader = function(mode) {
+      audio.playClick();
+      const icon = document.getElementById('gpuAvatarIcon');
+      const tag = document.getElementById('gpuStatusTag');
+      if (mode === 'wireframe') {
+        icon.className = 'fa-solid fa-border-none text-6xl text-gray-400';
+        tag.innerText = 'РЕЖИМ: WIREFRAME (ТОЛЬКО КАРКАС)';
+      } else if (mode === 'lowpoly') {
+        icon.className = 'fa-solid fa-shapes text-6xl text-yellow-400';
+        tag.innerText = 'РЕЖИМ: LOW-POLY 720p';
+      } else {
+        icon.className = 'fa-solid fa-cube text-7xl text-cyberCyan drop-shadow-[0_0_15px_#00f3ff]';
+        tag.innerText = 'РЕЖИМ: RTX ULTRA 4K SHADERS';
+      }
+    };
+
+    window.igniteReactor = function() {
+      audio.playPowerUp();
+      const icon = document.getElementById('reactorIcon');
+      const status = document.getElementById('reactorStatus');
+      icon.classList.add('text-cyberGreen', 'animate-pulse');
+      icon.classList.remove('text-cyberAmber');
+      status.innerHTML = '<span class="text-cyberGreen font-bold">ТОК: 650 W (СТАБИЛЬНО 12V)</span>';
+    };
+
+    window.guessCable = function(type) {
+      const res = document.getElementById('cableQuizResult');
+      if (type === 'hdmi') {
+        audio.playFanfare();
+        res.innerHTML = '<span class="text-cyberGreen font-bold">В ТОЧКУ! HDMI и DisplayPort передают ультрачеткую картинку на монитор!</span>';
+      } else {
+        audio.playBuzzer();
+        res.innerHTML = '<span class="text-red-400 font-bold">НЕ ТАК! Этот провод не подходит для монитора. Попробуй еще!</span>';
+      }
+    };
+
+    let timerInterval = null;
+    window.startAssemblyTimer = function() {
+      audio.playClick();
+      let timeLeft = 300;
+      const el = document.getElementById('questTimer');
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        const m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+        const s = String(timeLeft % 60).padStart(2, '0');
+        el.innerText = `${m}:${s}`;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          el.innerText = 'ВРЕМЯ!';
+        }
+      }, 1000);
+    };
+
+    window.checkTask = function(cb) {
+      if (cb.checked) {
+        audio.playClick();
+        cb.parentElement.classList.add('border-cyberGreen', 'text-cyberGreen');
+      } else {
+        cb.parentElement.classList.remove('border-cyberGreen', 'text-cyberGreen');
+      }
+    };
+
+    window.triggerTitanBoot = function() {
+      audio.playPowerUp();
+      const btn = document.getElementById('mainPowerButton');
+      const log = document.getElementById('biosBootLog');
+      btn.classList.add('animate-spin', 'border-cyberGreen', 'text-cyberGreen');
+
+      const messages = [
+        "UEFI BIOS v2.4 INITIALIZED...",
+        "CPU TEST: AMD/Intel Silicon OK (3600 MHz)",
+        "MEMORY CHECK: 16384 MB DDR5 DUAL CHANNEL OK",
+        "STORAGE: NVMe PCIE 4.0 SSD 1000GB DETECTED",
+        "GPU: GEFORCE RTX READY ON PCIE x16",
+        "POWER BUS: +12V, +5V, +3.3V STABLE",
+        ">>> ВСЕ СИСТЕМЫ В НОРМЕ! СУПЕРКОМПЬЮТЕР ОЖИЛ! <<<"
+      ];
+
+      log.innerHTML = '';
+      messages.forEach((msg, i) => {
+        setTimeout(() => {
+          log.innerHTML += `<div>${msg}</div>`;
+          log.scrollTop = log.scrollHeight;
+          audio.playTyping();
+          if (i === messages.length - 1) {
+            btn.classList.remove('animate-spin');
+            audio.playFanfare();
+          }
+        }, i * 350);
+      });
+    };
+
+    window.runPyCmd = function(action) {
+      audio.playTyping();
+      const consoleEl = document.getElementById('pyConsoleLines');
+      if (action === 'hello') {
+        consoleEl.innerHTML += `
+          <div class="text-white">>>> print("Привет, Титан!")</div>
+          <div class="text-cyberCyan">"Привет, Командир! Все 8 ядер процессора слушают твои указания!"</div>
+        `;
+      } else if (action === 'color') {
+        consoleEl.innerHTML += `
+          <div class="text-white">>>> titan.set_color("PINK")</div>
+          <div class="text-cyberPink">"Неоновая подсветка корпуса переключена на КИБЕР-РОЗОВЫЙ!"</div>
+        `;
+        document.body.style.filter = "hue-rotate(90deg)";
+        setTimeout(() => { document.body.style.filter = "none"; }, 1500);
+      } else if (action === 'scan') {
+        consoleEl.innerHTML += `
+          <div class="text-white">>>> titan.scan_viruses()</div>
+          <div class="text-cyberGreen">"Сканирование SSD... 0 угроз найдено. Система чиста как слеза!"</div>
+        `;
+      } else if (action === 'turbo') {
+        audio.playPowerUp();
+        consoleEl.innerHTML += `
+          <div class="text-white">>>> titan.turbo_mode()</div>
+          <div class="text-cyberAmber">"Турбо-буст активирован! Кулеры на максимум!"</div>
+        `;
+      }
+      consoleEl.scrollTop = consoleEl.scrollHeight;
+    };
+
+    // ==========================================
+    // 6. UI TOGGLES & EVENT LISTENERS
+    // ==========================================
+    document.getElementById('nextBtn').addEventListener('click', nextSlide);
+    document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+    // Audio Toggle
+    const audioBtn = document.getElementById('audioBtn');
+    const audioIcon = document.getElementById('audioIcon');
+    audioBtn.addEventListener('click', () => {
+      audio.muted = !audio.muted;
+      if (audio.muted) {
+        audioIcon.className = 'fa-solid fa-volume-xmark text-red-400';
+      } else {
+        audioIcon.className = 'fa-solid fa-volume-high text-cyberCyan';
+        audio.playClick();
+      }
+    });
+
+    // Fullscreen Toggle
+    document.getElementById('fullscreenBtn').addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    });
+
+    // Teacher Guide Toggle
+    const teacherDrawer = document.getElementById('teacherDrawer');
+    const toggleTeacher = () => {
+      audio.playClick();
+      teacherDrawer.classList.toggle('translate-x-full');
+    };
+    document.getElementById('teacherBtn').addEventListener('click', toggleTeacher);
+    document.getElementById('closeTeacherBtn').addEventListener('click', toggleTeacher);
+
+    // Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'Backspace') {
+        prevSlide();
+      } else if (e.key === 't' || e.key === 'T' || e.key === 'е' || e.key === 'Е') {
+        toggleTeacher();
+      } else if (e.key === 'm' || e.key === 'M') {
+        audioBtn.click();
+      }
+    });
+
+    // Touch Swipe Gestures for Mobile / Interactive Boards
+    let touchStartX = 0;
+    window.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    window.addEventListener('touchend', (e) => {
+      const touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 60) nextSlide();
+      if (touchEndX - touchStartX > 60) prevSlide();
+    }, { passive: true });
+
+    // ===== BONUS GAMES PACK =====
+const sh=a=>[...a].sort(()=>Math.random()-.5);
+const say=(id,h)=>{const e=document.getElementById(id);if(e)e.innerHTML=h;};
+const every=(id,ms,fn)=>{const h=setInterval(()=>{if(!document.getElementById(id)){clearInterval(h);return}fn(h)},ms);};
+const chip=document.createElement('div');
+chip.className='fixed top-16 right-4 z-30 font-hud text-sm text-cyberAmber px-3 py-1 border border-cyberAmber/50 bg-black/60 rounded';
+chip.textContent='⭐ 0';document.body.appendChild(chip);
+let score=0;const addScore=n=>{score+=n;chip.textContent='⭐ '+score;};
+window.confetti=()=>{for(let i=0;i<28;i++){const s=document.createElement('span');s.className='conf';s.textContent=['✨','⚡','🎉','💾','🚀'][i%5];s.style.left=Math.random()*100+'vw';s.style.animationDelay=Math.random()*.6+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),3500);}};
+const G=(tag,title,desc,body)=>`<div class="cyber-border w-full p-6 md:p-8 max-w-4xl text-center space-y-4"><div><div class="inline-block px-3 py-1 bg-cyberPink/10 border border-cyberPink/40 text-cyberPink text-xs font-code tracking-widest mb-2">${tag}</div><h2 class="font-hud text-2xl md:text-3xl font-black text-white glitch">${title}</h2><p class="text-sm text-gray-300 max-w-xl mx-auto">${desc}</p></div>${body}</div>`;
+const T=(a,b)=>`<div class="space-y-3"><h4 class="font-hud text-cyberPurple font-bold">🎯 ЦЕЛЬ:</h4><p>${a}</p><h4 class="font-hud text-cyberGreen font-bold">🛠 ДЕЙСТВИЕ РУКАМИ:</h4><p>${b}</p></div>`;
+const BTN='cyber-btn px-8 py-2 bg-gradient-to-r from-cyberPink to-purple-600 text-white font-hud text-sm';
+const STAT=(id,t)=>`<div id="${id}" class="font-code text-sm text-cyberCyan min-h-[24px]">${t}</div>`;
+
+// 1. COOLER GAME
+window.coolStart=function(){
+ const cells=[...document.querySelectorAll('.cc')];let tick=0,hit=0,temp=30;
+ document.getElementById('coolBtn').disabled=true;
+ cells.forEach(c=>{c.dataset.f='';c.textContent='🧊';c.onclick=()=>{if(c.dataset.f){c.dataset.f='';c.textContent='🧊';hit++;temp=Math.max(20,temp-6);audio.playClick();}}});
+ every('coolBar',100,h=>{tick++;
+  if(tick%6==0){const c=cells[Math.random()*12|0];if(!c.dataset.f){c.dataset.f=tick+10;c.textContent='🔥';}}
+  cells.forEach(c=>{if(c.dataset.f&&tick>=+c.dataset.f){c.dataset.f='';c.textContent='🧊';temp+=9;audio.playBuzzer();}});
+  temp=Math.max(20,temp-0.1);
+  const b=document.getElementById('coolBar');b.style.width=Math.min(temp,100)+'%';b.className='h-3 rounded '+(temp>70?'bg-cyberPink':'bg-cyberGreen');
+  say('coolStat',`Осталось ${Math.ceil((150-tick)/10)} c · охлаждено: ${hit} · ${Math.round(temp)}°C`);
+  if(temp>=100||tick>=150){clearInterval(h);const ok=temp<100;
+   if(ok){addScore(hit*3);confetti();audio.playFanfare();}else audio.playBuzzer();
+   say('coolStat',ok?`✅ Ядро спасено! Охлаждено: ${hit}`:'💥 Перегрев! Попробуй ещё раз');document.getElementById('coolBtn').disabled=false;}
+ });
+};
+// 2. MEMORY
+const MP=[['CPU','🧠 Мозг'],['RAM','🗂 Рабочий стол'],['SSD','📚 Шкаф памяти'],['GPU','🎨 Художник'],['PSU','❤️ Сердце'],['Кулер','❄️ Кондиционер']];
+const memInit=()=>{const g=document.getElementById('memGrid');let open=[],lock=false,done=0,tries=0;
+ sh(MP.flatMap((p,i)=>[{i,t:p[0]},{i,t:p[1]}])).forEach(d=>{const b=document.createElement('button');b.className='gcard h-20 font-hud text-xs text-white';b.textContent='❓';
+  b.onclick=()=>{if(lock||b.dataset.o)return;b.dataset.o=1;b.textContent=d.t;b.classList.add('border-cyberCyan');audio.playClick();open.push([b,d]);
+   if(open.length==2){tries++;const[[b1,d1],[b2,d2]]=open;
+    if(d1.i==d2.i){[b1,b2].forEach(x=>x.classList.add('border-cyberGreen','text-cyberGreen'));open=[];
+     if(++done==6){addScore(Math.max(5,30-tries*2));confetti();audio.playFanfare();say('memStat','🏆 Все пары найдены за '+tries+' ходов!');}else audio.playPowerUp();}
+    else{lock=true;audio.playBuzzer();setTimeout(()=>{[b1,b2].forEach(x=>{x.dataset.o='';x.textContent='❓';x.classList.remove('border-cyberCyan')});open=[];lock=false},800);}}};
+  g.appendChild(b);});};
+// 3. ORDER
+const ORD=['Вынуть вилку из розетки','Коснуться корпуса: снять статику','Поставить оперативку','Вставить видеокарту','Подключить кабели питания','Включить и проверить запуск'];
+const ordInit=()=>{const g=document.getElementById('ordGrid');let nx=0,err=0;
+ sh(ORD.map((t,i)=>({t,i}))).forEach(d=>{const b=document.createElement('button');b.className='gcard p-3 font-code text-xs text-white';b.textContent=d.t;
+  b.onclick=()=>{if(b.disabled)return;if(d.i==nx){b.disabled=true;nx++;b.classList.add('border-cyberGreen','text-cyberGreen');b.textContent=nx+'. '+d.t;audio.playPowerUp();
+    if(nx==6){addScore(Math.max(5,30-err*5));confetti();audio.playFanfare();say('ordStat','🏆 Сборка по протоколу! Ошибок: '+err);}}
+   else{err++;audio.playBuzzer();say('ordStat','⚠️ Не тот шаг! Ошибок: '+err);}};g.appendChild(b);});};
+// 4. SORTER
+const SRT=[['Мышка','h'],['Python','s'],['Видеокарта','h'],['Minecraft','s'],['Кулер','h'],['Windows','s'],['Оперативка','h'],['Браузер','s'],['Монитор','h'],['Мессенджер','s']];
+let srtState;
+window.srtInit=()=>{srtState={q:sh(SRT),i:0,ok:0};srtShow();};
+const srtShow=()=>{const s=srtState;if(s.i>=s.q.length){addScore(s.ok*3);if(s.ok>=8)confetti();say('srtCard',`Результат: ${s.ok} / ${s.q.length}`);say('srtBtns',`<button class="${BTN}" onclick="srtInit()">ЕЩЁ РАЗ</button>`);return;}
+ say('srtCard',s.q[s.i][0]);say('srtBtns',`<button class="gcard px-6 py-3 font-hud text-cyberAmber" onclick="srtPick('h')">🔩 ЖЕЛЕЗО</button><button class="gcard px-6 py-3 font-hud text-cyberPurple" onclick="srtPick('s')">💬 ПРОГРАММА</button>`);};
+window.srtPick=k=>{const s=srtState;if(s.q[s.i][1]==k){s.ok++;audio.playPowerUp();}else audio.playBuzzer();s.i++;srtShow();};
+// 5. BINARY
+const BT=[5,13,42,65];let binT=0;
+const binInit=()=>{const g=document.getElementById('binGrid');g.innerHTML='';
+ [128,64,32,16,8,4,2,1].forEach(v=>{const b=document.createElement('button');b.className='gcard py-4 font-code';b.dataset.v=v;b.dataset.on=0;b.innerHTML=`<div class="text-2xl">0</div><div class="text-[10px] text-gray-400">${v}</div>`;
+  b.onclick=()=>{const on=b.dataset.on==1?0:1;b.dataset.on=on;b.firstChild.textContent=on;b.firstChild.className='text-2xl '+(on?'text-cyberGreen':'');audio.playClick();binCheck();};g.appendChild(b);});
+ say('binTarget',BT[binT]);};
+const binCheck=()=>{const n=[...document.querySelectorAll('#binGrid button')].reduce((a,b)=>a+(b.dataset.on==1?+b.dataset.v:0),0);say('binStat',`Сейчас: ${n}`);
+ if(n==BT[binT]){audio.playPowerUp();addScore(5);binT++;if(binT>=BT.length){binT=0;confetti();audio.playFanfare();say('binStat','🏆 Ты думаешь как компьютер! 65 = буква «A»');}else{say('binStat','✅ Верно! Следующее число…');setTimeout(binInit,700);}}};
+// 6. FACTS
+const FACTS=['ENIAC, один из первых компьютеров, весил около 27 тонн.','Первая компьютерная мышка была деревянной.','В современном процессоре миллиарды крошечных транзисторов.','Слово «баг» связывают с мотыльком, застрявшим в реле старого компьютера.','Python назван в честь комедийного шоу «Монти Пайтон», а не змеи.','Один байт — это 8 бит: восемь переключателей 0 и 1.'];
+const factInit=()=>{const g=document.getElementById('factGrid');let n=0;FACTS.forEach(f=>{const b=document.createElement('button');b.className='gcard p-4 text-xs text-gray-200 min-h-[90px]';b.textContent='📦 Открыть';
+ b.onclick=()=>{if(b.dataset.o)return;b.dataset.o=1;b.textContent=f;b.classList.add('border-cyberAmber');audio.playPowerUp();if(++n==6){addScore(10);confetti();audio.playFanfare();}};g.appendChild(b);});};
+// 7. QUIZ
+const QZ=[['Кто «мозг» компьютера?',['CPU','RAM','PSU'],0],['Что исчезает при выключении тока?',['SSD','Данные в RAM','Материнская плата'],1],['Кто рисует графику в играх?',['Кулер','HDD','GPU'],2],['Зачем нужен кулер?',['Охлаждает','Хранит файлы','Ускоряет интернет'],0],['Python — это…',['Кабель','Язык команд','Деталь'],1]];
+let qz;window.qzInit=()=>{qz={i:0,ok:0};qzShow();};
+const qzShow=()=>{if(qz.i>=5){addScore(qz.ok*4);if(qz.ok>=4)confetti();const r=qz.ok==5?'КИБЕР-ИНЖЕНЕР':qz.ok>=3?'ТЕХНИК-ПИЛОТ':'КАДЕТ';say('qzBox',`<div class="font-hud text-xl text-cyberGreen">${qz.ok} / 5 · ранг: ${r}</div><div class="text-cyberAmber mt-2">Всего очков за урок: ⭐ ${score}</div><button class="${BTN} mt-4" onclick="qzInit()">ЕЩЁ РАЗ</button>`);return;}
+ const q=QZ[qz.i];say('qzBox',`<div class="font-hud text-white mb-3">${qz.i+1}/5 · ${q[0]}</div><div class="grid gap-3 sm:grid-cols-3">${q[1].map((o,k)=>`<button class="gcard p-3 text-sm text-white" onclick="qzPick(${k})">${o}</button>`).join('')}</div>`);};
+window.qzPick=k=>{if(k==QZ[qz.i][2]){qz.ok++;audio.playPowerUp();}else audio.playBuzzer();qz.i++;qzShow();};
+
+const NEW={
+ cool:{title:'БОНУС: ОХЛАДИ ЯДРО',onShow:null,render:()=>G('МИНИ-ИГРА // РЕАКЦИЯ','ОХЛАДИ ЯДРО','Тушишь 🔥 до того, как процессор перегреется. 15 секунд!',`<div class="w-full h-3 bg-gray-800 rounded"><div id="coolBar" class="h-3 rounded bg-cyberGreen" style="width:30%"></div></div><div class="grid grid-cols-4 gap-3">${'<button class="cc gcard h-16 text-2xl">🧊</button>'.repeat(12)}</div>${STAT('coolStat','Готов? Жми СТАРТ')}<button id="coolBtn" onclick="coolStart()" class="${BTN}">СТАРТ</button>`),teacher:T('Показать, зачем кулер: без него процессор перегревается.','Дать ученику потрогать радиатор и покрутить вентилятор.')},
+ mem:{title:'БОНУС: ПАМЯТЬ ТИТАНА',onShow:memInit,render:()=>G('МИНИ-ИГРА // ПАМЯТЬ','НАЙДИ ПАРЫ','Деталь и её метафора. Открывай по две карточки.',`<div id="memGrid" class="grid grid-cols-3 sm:grid-cols-4 gap-3"></div>${STAT('memStat','Найди 6 пар')}`),teacher:T('Закрепить метафоры всех деталей.','Показывать настоящие детали при каждой найденной паре.')},
+ ord:{title:'БОНУС: ПРОТОКОЛ СБОРКИ',onShow:ordInit,render:()=>G('МИНИ-ИГРА // ПОРЯДОК','ПРОТОКОЛ СБОРКИ','Нажимай шаги в правильном порядке, от первого до последнего.',`<div id="ordGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>${STAT('ordStat','Что делаем первым?')}`),teacher:T('Запомнить безопасный порядок работы.','Повторить шаги на настоящем блоке.')},
+ srt:{title:'БОНУС: ЖЕЛЕЗО ИЛИ ПРОГРАММА?',onShow:srtInit,render:()=>G('МИНИ-ИГРА // СОРТИРОВКА','ЖЕЛЕЗО ИЛИ ПРОГРАММА?','Можно потрогать — железо. Нельзя — программа.',`<div id="srtCard" class="font-hud text-3xl text-white py-6"></div><div id="srtBtns" class="flex justify-center gap-4"></div>`),teacher:T('Закрепить Hardware и Software.','Просить показать каждое «железо» в блоке.')},
+ bin:{title:'БОНУС: ДВОИЧНЫЙ КОД',onShow:binInit,render:()=>G('МИНИ-ИГРА // ЛОГИКА','ДУМАЙ КАК КОМПЬЮТЕР','Включай биты 0/1 так, чтобы сумма равнялась цели.',`<div class="font-hud text-5xl text-cyberAmber">ЦЕЛЬ: <span id="binTarget"></span></div><div id="binGrid" class="grid grid-cols-8 gap-2"></div>${STAT('binStat','Нажимай биты')}`),teacher:T('Показать, что компьютер знает только 0 и 1.','Показать, как биты меняют число.')},
+ fact:{title:'БОНУС: СУНДУКИ ФАКТОВ',onShow:factInit,render:()=>G('ЛУТБОКС // ФАКТЫ','СУНДУКИ ФАКТОВ','Открой все шесть сундуков.',`<div id="factGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>`),teacher:T('Разрядить внимание и дать интересные факты.','Обсудить любимый факт.')},
+ quiz:{title:'ФИНАЛ: КИБЕР-ЭКЗАМЕН',onShow:qzInit,render:()=>G('ФИНАЛЬНЫЙ ЭКЗАМЕН','КИБЕР-ЭКЗАМЕН','5 вопросов, чтобы получить ранг пилота.',`<div id="qzBox" class="py-2"></div>`),teacher:T('Проверить усвоение урока.','Просить показывать ответ на настоящем железе.')}
+};
+const mk=k=>({id:0,invKey:null,...NEW[k]});
+[[14,['fact','quiz']],[13,['bin']],[12,['srt']],[9,['ord']],[8,['mem']],[4,['cool']]].forEach(([i,ks])=>slidesData.splice(i,0,...ks.map(mk)));
+slidesData.forEach((s,i)=>s.id=i+1);
+
+    // Initial render
+    window.onload = function() {
+      renderSlide(0);
+    };
+  </script>
+</body>
+</html>
